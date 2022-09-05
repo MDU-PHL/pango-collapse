@@ -1,3 +1,4 @@
+from typing import List
 from pango_aliasor.aliasor import Aliasor
 
 
@@ -5,7 +6,7 @@ class Collapsor(Aliasor):
     def __init__(self, alias_file=None):
         super().__init__(alias_file=alias_file)
 
-    def collapse(self, uncompressed_lineage: str, potential_parents: tuple[str]):
+    def collapse(self, uncompressed_lineage: str, potential_parents: List[str]):
         if "Recombinant" in potential_parents and uncompressed_lineage.startswith("X"):
             # special case for Recombinant
             return "Recombinant"
