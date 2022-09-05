@@ -5,6 +5,8 @@
 
 CLI to collapse Pango linages for reporting
 
+[![](pango-watch-tree.png)]()
+
 ## Install 
 
 Install from pypi with pip.
