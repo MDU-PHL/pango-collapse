@@ -22,7 +22,7 @@ def main(
         dir_okay=False,
     ),
     collapse_file: Optional[Path] = typer.Option(
-        None,
+        f"{Path(__file__).parent.resolve()}/collapse.txt",
         "-c",
         "--collapse-file",
         help="Path to file with lineages on each line to collapse up to.",
