@@ -15,7 +15,7 @@ pip install pango-collapse
 
 ## Usage
 
-`pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). `pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the use defined collapse file the lineage will be collapsed up to either `A` or `B`. `pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage) and `Lineage_family` (the lineage compressed up to). 
+`pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). 
 
 ```
 # input.csv
@@ -25,11 +25,16 @@ BA.4.6
 BE.1
 ```
 
+`pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the use defined collapse file the lineage will be collapsed up to either `A` or `B`. 
+
 ```
 # collapse.txt
 BA.5
 BE.1
 ```
+
+`pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage) and `Lineage_family` (the lineage compressed up to) columns. 
+
 
 ```bash
 pango-collapse input.csv --collapse-file collapse.txt -o output.csv 
