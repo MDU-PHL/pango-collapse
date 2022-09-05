@@ -27,7 +27,7 @@ BA.4.6
 BE.1
 ```
 
-`pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the use defined collapse file the lineage will be collapsed up to either `A` or `B`. 
+`pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the use defined collapse file the lineage will be collapsed up to either `A` or `B`. [See here for example file](https://github.com/MDU-PHL/pango-collapse/blob/main/tests/data/collapse.txt).
 
 ```
 # collapse.txt
