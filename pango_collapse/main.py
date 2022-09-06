@@ -5,12 +5,15 @@ from .collapsor import Collapsor
 
 app = typer.Typer()
 
+
 def version_callback(value: bool):
     if value:
         import pkg_resources
-        version = pkg_resources.get_distribution('pango-collapse').version
+
+        version = pkg_resources.get_distribution("pango-collapse").version
         print(f"pango-collapse {version}")
         raise typer.Exit()
+
 
 @app.command(context_settings={"help_option_names": ["-h", "--help"]})
 def main(
@@ -33,7 +36,6 @@ def main(
         "--collapse-file",
         help="Path to file with lineages on each line to collapse up to.",
     ),
-    
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
         "-l",
@@ -63,7 +65,12 @@ def main(
         help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
     ),
     version: Optional[bool] = typer.Option(
-        None, "-v", "--version", callback=version_callback, is_eager=True,  help="Print the current version number and exit.",
+        None,
+        "-v",
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Print the current version number and exit.",
     ),
 ):
     """
