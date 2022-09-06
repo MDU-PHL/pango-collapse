@@ -5,7 +5,7 @@
 
 CLI to collapse Pango linages for reporting
 
-[![](collapse.gif)](https://mdu-phl.github.io/pango-watch/tree/)
+[![](pango-collapse.gif)](https://mdu-phl.github.io/pango-watch/tree/)
 
 ## Install 
 
