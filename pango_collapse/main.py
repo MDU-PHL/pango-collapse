@@ -47,7 +47,7 @@ def main(
     ),
 ):
     """
-    Collapse Pango linages up to user defined lineages.
+    Collapse Pango sublineages up to user defined parent lineages.
     """
     import pandas as pd
 
