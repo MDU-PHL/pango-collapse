@@ -29,7 +29,15 @@ def main(
     ),
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
-        help="Column to extract from input file for lineage",
+        help="Column to extract from input file for lineage.",
+    ),
+    full_column: Optional[str] = typer.Option(
+        "Lineage_full",
+        help="Column to use for the uncompressed output.",
+    ),
+    collapse_column: Optional[str] = typer.Option(
+        "Lineage_family",
+        help="Column to use for the collapsed output.",
     ),
     alias_file: Optional[Path] = typer.Option(
         None,
@@ -46,7 +54,7 @@ def main(
     collapsor = Collapsor(alias_file=alias_file)
 
     df = pd.read_csv(input, low_memory=False)
-    df["Lineage_full"] = df[lineage_column].apply(
+    df[full_column] = df[lineage_column].apply(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
     potential_parents = ["A", "B"]
@@ -55,7 +63,7 @@ def main(
             potential_parents += [
                 l.strip() for l in f.readlines() if not l.startswith("#")
             ]
-    df["Lineage_family"] = df.Lineage_full.apply(
+    df[collapse_column] = df[full_column].apply(
         lambda uncompressed_lineage: collapsor.collapse(
             uncompressed_lineage, tuple(potential_parents)
         )
