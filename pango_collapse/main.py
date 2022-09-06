@@ -33,20 +33,23 @@ def main(
         "--collapse-file",
         help="Path to file with lineages on each line to collapse up to.",
     ),
-    collapse_full: Optional[bool] = typer.Option(
-        True,
-        help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
-    ),
+    
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
+        "-l",
+        "--lineage-column",
         help="Column to extract from input file for lineage.",
     ),
     full_column: Optional[str] = typer.Option(
         "Lineage_full",
+        "-f",
+        "--full-column",
         help="Column to use for the uncompressed output.",
     ),
     collapse_column: Optional[str] = typer.Option(
         "Lineage_family",
+        "-k",
+        "--collapse-column",
         help="Column to use for the collapsed output.",
     ),
     alias_file: Optional[Path] = typer.Option(
@@ -54,6 +57,10 @@ def main(
         "-a",
         "--alias-file",
         help="Path to Pango Alias file for pango_aliasor. Will download latest file if not supplied.",
+    ),
+    collapse_full: Optional[bool] = typer.Option(
+        True,
+        help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
     ),
     version: Optional[bool] = typer.Option(
         None, "-v", "--version", callback=version_callback, is_eager=True
