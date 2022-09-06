@@ -34,7 +34,7 @@ def main(
         f"{Path(__file__).parent.resolve()}/collapse.txt",
         "-c",
         "--collapse-file",
-        help="Path to file with lineages on each line to collapse up to.",
+        help="Path to collapse file with lineages (one per line) to collapse up to. Defaults to collapse file shipped with this version of pango-collapse.",
     ),
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
@@ -64,6 +64,12 @@ def main(
         True,
         help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
     ),
+    auto_update: Optional[bool] = typer.Option(
+        False,
+        "-u",
+        "--auto-update",
+        help="Use the latest collapse file from github.",
+    ),
     version: Optional[bool] = typer.Option(
         None,
         "-v",
@@ -87,11 +93,17 @@ def main(
     potential_parents = []
     if collapse_full:
         potential_parents = ["A", "B"]
-    if collapse_file:
+    if auto_update:
+        import urllib.request, json
+
+        with urllib.request.urlopen(
+            "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
+        ) as data:
+            potential_parents += data.read().decode("utf-8").split("\n")
+    elif collapse_file:
         with open(collapse_file) as f:
-            potential_parents += [
-                l.strip() for l in f.readlines() if not l.startswith("#")
-            ]
+            potential_parents += f.readlines()
+    potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
     df[collapse_column] = df[full_column].apply(
         lambda uncompressed_lineage: collapsor.collapse(
             uncompressed_lineage, tuple(potential_parents)
