@@ -63,7 +63,7 @@ def main(
         help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
     ),
     version: Optional[bool] = typer.Option(
-        None, "-v", "--version", callback=version_callback, is_eager=True
+        None, "-v", "--version", callback=version_callback, is_eager=True,  help="Print the current version number and exit.",
     ),
 ):
     """
