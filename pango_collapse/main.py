@@ -5,6 +5,12 @@ from .collapsor import Collapsor
 
 app = typer.Typer()
 
+def version_callback(value: bool):
+    if value:
+        import pkg_resources
+        version = pkg_resources.get_distribution('pango-collapse').version
+        print(f"pango-collapse {version}")
+        raise typer.Exit()
 
 @app.command(context_settings={"help_option_names": ["-h", "--help"]})
 def main(
@@ -48,6 +54,9 @@ def main(
         "-a",
         "--alias-file",
         help="Path to Pango Alias file for pango_aliasor. Will download latest file if not supplied.",
+    ),
+    version: Optional[bool] = typer.Option(
+        None, "-v", "--version", callback=version_callback, is_eager=True
     ),
 ):
     """
