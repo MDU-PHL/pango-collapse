@@ -6,7 +6,7 @@ from .collapsor import Collapsor
 app = typer.Typer()
 
 
-@app.command()
+@app.command(context_settings={"help_option_names": ["-h", "--help"]})
 def main(
     input: Path = typer.Argument(
         ...,
