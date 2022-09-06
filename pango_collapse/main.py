@@ -27,6 +27,10 @@ def main(
         "--collapse-file",
         help="Path to file with lineages on each line to collapse up to.",
     ),
+    collapse_full: Optional[bool] = typer.Option(
+        True,
+        help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
+    ),
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
         help="Column to extract from input file for lineage.",
@@ -57,7 +61,9 @@ def main(
     df[full_column] = df[lineage_column].apply(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
-    potential_parents = ["A", "B"]
+    potential_parents = []
+    if collapse_full:
+        potential_parents = ["A", "B"]
     if collapse_file:
         with open(collapse_file) as f:
             potential_parents += [
