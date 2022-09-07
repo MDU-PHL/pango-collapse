@@ -2,15 +2,17 @@ from pathlib import Path
 from typing import Optional
 import typer
 from .collapsor import Collapsor
+from rich import print
 
 app = typer.Typer()
 
+def get_version():
+    import pkg_resources
+    return pkg_resources.get_distribution("pango-collapse").version
 
 def version_callback(value: bool):
     if value:
-        import pkg_resources
-
-        version = pkg_resources.get_distribution("pango-collapse").version
+        version = get_version()
         print(f"pango-collapse {version}")
         raise typer.Exit()
 
@@ -82,6 +84,8 @@ def main(
     """
     Collapse Pango sublineages up to user defined parent lineages.
     """
+    version = get_version()
+    print(f"\n[bold green]pango-collapse {version}[bold green]\n")
     import pandas as pd
 
     collapsor = Collapsor(alias_file=alias_file)
@@ -95,14 +99,16 @@ def main(
         potential_parents = ["A", "B"]
     if auto_update:
         import urllib.request
-        with urllib.request.urlopen(
-            "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
-        ) as data:
+        url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
+        print(f"Loading collapse file from {url}\n")
+        with urllib.request.urlopen(url) as data:
             potential_parents += data.read().decode("utf-8").split("\n")
     elif collapse_file:
         with open(collapse_file) as f:
             potential_parents += f.readlines()
     potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
+    print("[yellow]Collapsing up to the following lineages:[yellow]")
+    print(' -', '\n - '.join(potential_parents))
     df[collapse_column] = df[full_column].apply(
         lambda uncompressed_lineage: collapsor.collapse(
             uncompressed_lineage, tuple(potential_parents)
