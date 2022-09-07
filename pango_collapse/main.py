@@ -94,8 +94,7 @@ def main(
     if collapse_full:
         potential_parents = ["A", "B"]
     if auto_update:
-        import urllib.request, json
-
+        import urllib.request
         with urllib.request.urlopen(
             "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
         ) as data:
