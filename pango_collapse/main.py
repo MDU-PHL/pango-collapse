@@ -6,9 +6,12 @@ from rich import print
 
 app = typer.Typer()
 
+
 def get_version():
     import pkg_resources
+
     return pkg_resources.get_distribution("pango-collapse").version
+
 
 def version_callback(value: bool):
     if value:
@@ -66,6 +69,10 @@ def main(
         True,
         help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
     ),
+    strict: Optional[bool] = typer.Option(
+        False,
+        help="If a linage is not in the collapse file return None instead of the uncompressed lineage. Overridden by --collapse_full.",
+    ),
     auto_update: Optional[bool] = typer.Option(
         False,
         "-u",
@@ -90,8 +97,11 @@ def main(
 
     collapsor = Collapsor(alias_file=alias_file)
 
-    df = pd.read_csv(input, low_memory=False, sep=',' if input.suffix == '.tsv' else '\t')
-   
+    sep = ","
+    if input.suffix == ".tsv":
+        sep = "\t"
+    df = pd.read_csv(input, low_memory=False, sep=sep)
+
     df[full_column] = df[lineage_column].apply(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
@@ -100,6 +110,7 @@ def main(
         potential_parents = ["A", "B"]
     if auto_update:
         import urllib.request
+
         url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
         print(f"Loading collapse file from {url}\n")
         with urllib.request.urlopen(url) as data:
@@ -109,13 +120,15 @@ def main(
             potential_parents += f.readlines()
     potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
     print("[yellow]Collapsing up to the following lineages:[yellow]")
-    print(' -', '\n - '.join(potential_parents))
+    print(" -", "\n - ".join(potential_parents))
     df[collapse_column] = df[full_column].apply(
         lambda uncompressed_lineage: collapsor.collapse(
-            uncompressed_lineage, tuple(potential_parents)
+            uncompressed_lineage, tuple(potential_parents), strict=strict
         )
         if uncompressed_lineage
         else None
     )
-
-    df.to_csv(output, index=False, sep=',' if output.suffix == '.tsv' else '\t')
+    sep = ","
+    if output.suffix == ".tsv":
+        sep = "\t"
+    df.to_csv(output, index=False, sep=sep)
