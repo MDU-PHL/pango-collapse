@@ -3,7 +3,7 @@ Recombinant
 BA.2.75
 BA.2.38
 BA.4.6
-BA.2.3.20 
+BA.2.3.20
 # alpha
 B.1.1.7
 # gamma
@@ -27,3 +27,6 @@ BA.2
 BA.3
 BA.4
 BA.5
+# Capture all others
+A
+B
