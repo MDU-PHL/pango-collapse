@@ -68,7 +68,7 @@ def main(
     strict: Optional[bool] = typer.Option(
         False,
         "-s",
-        "--strict"
+        "--strict",
         help="If a lineage is not in the collapse file return None instead of the uncompressed lineage.",
     ),
     auto_update: Optional[bool] = typer.Option(
