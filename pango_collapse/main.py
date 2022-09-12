@@ -21,7 +21,7 @@ def version_callback(value: bool):
 def main(
     input: Path = typer.Argument(
         ...,
-        help="Path in input CSV with with Lineage column.",
+        help="Path to input CSV/TSV with Lineage column.",
         dir_okay=False,
         exists=True,
     ),
@@ -29,7 +29,7 @@ def main(
         ...,
         "-o",
         "--output",
-        help="Path in output CSV with with Lineage column.",
+        help="Path to output CSV/TSV with Lineage column.",
         dir_okay=False,
     ),
     collapse_file: Optional[Path] = typer.Option(
@@ -90,7 +90,8 @@ def main(
 
     collapsor = Collapsor(alias_file=alias_file)
 
-    df = pd.read_csv(input, low_memory=False)
+    df = pd.read_csv(input, low_memory=False, sep=',' if input.suffix == '.tsv' else '\t')
+   
     df[full_column] = df[lineage_column].apply(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
@@ -116,4 +117,5 @@ def main(
         if uncompressed_lineage
         else None
     )
-    df.to_csv(output, index=False)
+
+    df.to_csv(output, index=False, sep=',' if output.suffix == '.tsv' else '\t')
