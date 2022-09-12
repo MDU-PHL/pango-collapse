@@ -21,7 +21,7 @@ def test_cli():
             "-o",
             "tests/data/output.csv",
             "-c",
-            "tests/data/collapse.txt",
+            "tests/data/test_collapse.txt",
             "-a",
             "tests/data/alias_key.json",
         ],
@@ -29,5 +29,29 @@ def test_cli():
     assert result.exit_code == 0
     expected = pd.read_csv("tests/data/expected.csv")
     output = pd.read_csv("tests/data/output.csv")
+    assert expected.Lineage_full.equals(output.Lineage_full)
+    assert expected.Lineage_family.equals(output.Lineage_family)
+
+
+def test_nextclade():
+    import pandas as pd
+
+    result = runner.invoke(
+        app,
+        [
+            "tests/data/nextclade.tsv",
+            "-o",
+            "tests/data/nextclade_output.tsv",
+            "-c",
+            "tests/data/test_collapse.txt",
+            "-a",
+            "tests/data/alias_key.json",
+            "-l",
+            "Nextclade_pango",
+        ],
+    )
+    assert result.exit_code == 0
+    expected = pd.read_csv("tests/data/nextclade_output_expected.tsv", sep="\t")
+    output = pd.read_csv("tests/data/nextclade_output.tsv", sep="\t")
     assert expected.Lineage_full.equals(output.Lineage_full)
     assert expected.Lineage_family.equals(output.Lineage_family)
