@@ -48,6 +48,7 @@ def test_nextclade():
             "tests/data/alias_key.json",
             "-l",
             "Nextclade_pango",
+            "-s"
         ],
     )
     assert result.exit_code == 0

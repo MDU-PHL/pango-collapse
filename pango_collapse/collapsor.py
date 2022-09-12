@@ -23,4 +23,4 @@ class Collapsor(Aliasor):
                 return compressed_parent_lineage
         if strict:
             return None
-        return uncompressed_lineage
+        return compressed_lineage
