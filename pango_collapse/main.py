@@ -65,10 +65,6 @@ def main(
         "--alias-file",
         help="Path to Pango Alias file for pango_aliasor. Will download latest file if not supplied.",
     ),
-    collapse_full: Optional[bool] = typer.Option(
-        True,
-        help="Collapse sublineages all the way up to A or B if they don't have parents in the collapse file.",
-    ),
     strict: Optional[bool] = typer.Option(
         False,
         help="If a linage is not in the collapse file return None instead of the uncompressed lineage. Overridden by --collapse_full.",
@@ -106,8 +102,6 @@ def main(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
     potential_parents = []
-    if collapse_full:
-        potential_parents = ["A", "B"]
     if auto_update:
         import urllib.request
 
