@@ -2,7 +2,6 @@
 Recombinant
 BA.2.75
 BA.2.38
-BA.4.6
 BA.2.3.20
 # alpha
 B.1.1.7

@@ -144,6 +144,4 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │                                        customize the installation.   │
 │    --help                -h            Show this message and exit.   │
 ╰──────────────────────────────────────────────────────────────────────╯
-
-
 ```
