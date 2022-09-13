@@ -89,3 +89,61 @@ df.Lineage_family.value_counts().plot(kind='bar')
 ```
 
 ![](images/nextclade_omicron.jpg)
+
+## --help
+
+```
+                                                                       
+ Usage: pango-collapse [OPTIONS] INPUT                                  
+                                                                        
+ Collapse Pango sublineages up to user defined parent lineages.         
+                                                                        
+╭─ Arguments ──────────────────────────────────────────────────────────╮
+│ *    input      FILE  Path to input CSV/TSV with Lineage column.     │
+│                       [default: None]                                │
+│                       [required]                                     │
+╰──────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────╮
+│ *  --output              -o      FILE  Path to output CSV/TSV with   │
+│                                        Lineage column.               │
+│                                        [default: None]               │
+│                                        [required]                    │
+│    --collapse-file       -c      PATH  Path to collapse file with    │
+│                                        lineages (one per line) to    │
+│                                        collapse up to. Defaults to   │
+│                                        collapse file shipped with    │
+│                                        this version of               │
+│                                        pango-collapse.               │
+│                                        [default:                     │
+│                                        /Users/wwirth/Library/CloudS… │
+│    --lineage-column      -l      TEXT  Column to extract from input  │
+│                                        file for lineage.             │
+│                                        [default: Lineage]            │
+│    --full-column         -f      TEXT  Column to use for the         │
+│                                        uncompressed output.          │
+│                                        [default: Lineage_full]       │
+│    --collapse-column     -k      TEXT  Column to use for the         │
+│                                        collapsed output.             │
+│                                        [default: Lineage_family]     │
+│    --alias-file          -a      PATH  Path to Pango Alias file for  │
+│                                        pango_aliasor. Will download  │
+│                                        latest file if not supplied.  │
+│                                        [default: None]               │
+│    --strict              -s            If a lineage is not in the    │
+│                                        collapse file return None     │
+│                                        instead of the uncompressed   │
+│                                        lineage.                      │
+│    --latest              -u            Use the latest collapse file  │
+│                                        from github.                  │
+│    --version             -v            Print the current version     │
+│                                        number and exit.              │
+│    --install-completion                Install completion for the    │
+│                                        current shell.                │
+│    --show-completion                   Show completion for the       │
+│                                        current shell, to copy it or  │
+│                                        customize the installation.   │
+│    --help                -h            Show this message and exit.   │
+╰──────────────────────────────────────────────────────────────────────╯
+
+
+```
