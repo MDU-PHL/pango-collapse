@@ -21,6 +21,8 @@ class Collapsor(Aliasor):
             compressed_parent_lineage = self.compress(".".join(parts[:-i]))
             if compressed_parent_lineage in potential_parents:
                 return compressed_parent_lineage
+        
         if strict:
             return None
-        return compressed_lineage
+
+        return uncompressed_lineage

@@ -1,0 +1,6 @@
+# omicron
+BA.1
+BA.2
+BA.3
+BA.4
+BA.5

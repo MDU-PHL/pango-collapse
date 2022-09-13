@@ -43,12 +43,12 @@ def test_nextclade():
             "-o",
             "tests/data/nextclade_output.tsv",
             "-c",
-            "tests/data/test_collapse.txt",
+            "tests/data/omicron_collapse.txt",
             "-a",
             "tests/data/alias_key.json",
             "-l",
             "Nextclade_pango",
-            "-s"
+            "--strict"
         ],
     )
     assert result.exit_code == 0
