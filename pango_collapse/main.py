@@ -117,11 +117,11 @@ def main(
     potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
     print("[yellow]Collapsing up to the following lineages:[yellow]")
     print(" -", "\n - ".join(potential_parents))
-    df[collapse_column] = df[full_column].apply(
-        lambda uncompressed_lineage: collapsor.collapse(
-            uncompressed_lineage, tuple(potential_parents), strict=strict
+    df[collapse_column] = df[lineage_column].apply(
+        lambda compressed_lineage: collapsor.collapse(
+            compressed_lineage, potential_parents, strict=strict
         )
-        if uncompressed_lineage
+        if pd.notnull(compressed_lineage)
         else None
     )
     sep = ","
