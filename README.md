@@ -81,7 +81,7 @@ The `--strict` tells `pango-collapse` to use strict mode i.e. only report lineag
 
 We can visualise the results in pandas:
 
-```
+```python
 import pandas as pd
 df = pd.read_csv("nextclade_output.tsv", sep="\t")
 df.Lineage_family.fillna('Other', inplace=True)
