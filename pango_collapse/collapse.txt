@@ -1,6 +1,7 @@
 # special
 Recombinant
 BA.2.75
+BA.2.75.4
 BA.2.38
 BA.2.3.20
 # alpha
