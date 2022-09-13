@@ -71,10 +71,10 @@ def main(
         "--strict",
         help="If a lineage is not in the collapse file return None instead of the uncompressed lineage.",
     ),
-    auto_update: Optional[bool] = typer.Option(
+    latest: Optional[bool] = typer.Option(
         False,
         "-u",
-        "--auto-update",
+        "--latest",
         help="Use the latest collapse file from github.",
     ),
     version: Optional[bool] = typer.Option(
@@ -104,7 +104,7 @@ def main(
         lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
     )
     potential_parents = []
-    if auto_update:
+    if latest:
         import urllib.request
 
         url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
