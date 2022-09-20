@@ -69,7 +69,7 @@ def main(
         False,
         "-s",
         "--strict",
-        help="If a lineage is not in the collapse file return None instead of the uncompressed lineage.",
+        help="If a lineage is not in the collapse file return None instead of the compressed lineage.",
     ),
     latest: Optional[bool] = typer.Option(
         False,
