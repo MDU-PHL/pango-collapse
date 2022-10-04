@@ -110,8 +110,8 @@ def main(
         url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
         print(f"Loading collapse file from {url}\n")
         with urllib.request.urlopen(url) as data:
-            potential_parents += data.read().decode("utf-8").split("\n")
-    elif collapse_file:
+            potential_parents += data.read().decode("utf-8").strip().split("\n")
+    else:
         with open(collapse_file) as f:
             potential_parents += f.readlines()
     potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
