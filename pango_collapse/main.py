@@ -113,7 +113,7 @@ def main(
             potential_parents += data.read().decode("utf-8").strip().split("\n")
     else:
         with open(collapse_file) as f:
-            potential_parents += f.readlines()
+            potential_parents += [l for l in f.readlines() if l.strip()]
     potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
     print("[yellow]Collapsing up to the following lineages:[yellow]")
     print(" -", "\n - ".join(potential_parents))
