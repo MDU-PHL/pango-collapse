@@ -1,6 +1,6 @@
 from typing import List
 from pango_aliasor.aliasor import Aliasor
-
+import pandas as pd
 
 class Collapsor(Aliasor):
     def __init__(self, alias_file=None):
@@ -30,3 +30,11 @@ class Collapsor(Aliasor):
             return None
 
         return compressed_lineage
+
+    def collapse_column(self, array_of_uncompress_lineages, potential_parents, strict=False):
+        return [ self.collapse(
+            compressed_lineage, potential_parents, strict=strict
+        ) if pd.notna(compressed_lineage) else None for compressed_lineage in array_of_uncompress_lineages]
+
+    def uncompress_column(self, array_of_compressed_lineages):
+        return [self.uncompress(lineage) if pd.notna(lineage) else None for lineage in array_of_compressed_lineages]

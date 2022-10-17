@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Optional
 import typer
+
+from .utils import load_potential_parents_from_file, load_potential_parents_from_url
 from .collapsor import Collapsor
 from rich import print
 
@@ -75,7 +77,12 @@ def main(
         False,
         "-u",
         "--latest",
-        help="Use the latest collapse file from github.",
+        help="Load the collapse from from a url (--url).",
+    ),
+    collapse_file_url: Optional[str] = typer.Option(
+        "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt",
+        "--url",
+        help="Url to use when loading the collapse file with --latest.",
     ),
     version: Optional[bool] = typer.Option(
         None,
@@ -99,31 +106,18 @@ def main(
     if input.suffix == ".tsv":
         sep = "\t"
     df = pd.read_csv(input, low_memory=False, sep=sep)
+    
+    df[full_column] = collapsor.uncompress_column(df[lineage_column])
 
-    df[full_column] = df[lineage_column].apply(
-        lambda lineage: collapsor.uncompress(lineage) if pd.notna(lineage) else None
-    )
-    potential_parents = []
     if latest:
-        import urllib.request
-
-        url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
-        print(f"Loading collapse file from {url}\n")
-        with urllib.request.urlopen(url) as data:
-            potential_parents += data.read().decode("utf-8").strip().split("\n")
+        print(f"Loading collapse file from {collapse_file_url}\n")
+        potential_parents = load_potential_parents_from_url(url=collapse_file_url)
     else:
-        with open(collapse_file) as f:
-            potential_parents += [l for l in f.readlines() if l.strip()]
-    potential_parents = [l.strip() for l in potential_parents if not l.startswith("#")]
+        potential_parents = load_potential_parents_from_file(collapse_file=collapse_file)
     print("[yellow]Collapsing up to the following lineages:[yellow]")
     print(" -", "\n - ".join(potential_parents))
-    df[collapse_column] = df[lineage_column].apply(
-        lambda compressed_lineage: collapsor.collapse(
-            compressed_lineage, potential_parents, strict=strict
-        )
-        if pd.notnull(compressed_lineage)
-        else None
-    )
+    df[collapse_column] = collapsor.collapse_column(df[lineage_column], potential_parents=potential_parents, strict=strict)
+    
     sep = ","
     if output.suffix == ".tsv":
         sep = "\t"
