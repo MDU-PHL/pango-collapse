@@ -67,7 +67,7 @@ BA.4
 BA.5
 ```
 
-> Note: BA is an alias of B.1.1.529, however, as we have not included B.1.1.529 in our collapse file any samples designated B.1.1.529 will not be compressed.
+> Note: BA is an alias of B.1.1.529, however, as we have not included B.1.1.529 in our collapse file any samples designated B.1.1.529 will not be included.
 
 Run the following command to collapse the omicron sub-lineages:
 
