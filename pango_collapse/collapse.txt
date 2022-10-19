@@ -1,11 +1,10 @@
 # special
-Recombinant
 BA.2.75
 BA.2.75.2
-BA.2.75.4
 BA.2.3.20
 BQ.1
-BQ.1.1
+# recombinant
+XBB
 # alpha
 B.1.1.7
 # gamma
@@ -32,3 +31,4 @@ BA.5
 # capture all others
 A
 B
+Recombinant
