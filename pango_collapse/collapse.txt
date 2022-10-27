@@ -1,8 +1,8 @@
 # special
 BA.2.75
 BA.2.75.2
-BA.2.3.20
 BQ.1
+BF.7
 # recombinant
 XBB
 # alpha
