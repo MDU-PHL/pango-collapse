@@ -1,0 +1,27 @@
+# alpha
+B.1.1.7
+# gamma
+P.1
+# beta
+B.1.351
+# delta
+B.1.617.2
+# mu
+B.1.621
+# kappa
+B.1.617.1
+# eta
+B.1.525
+# lambda
+C.37
+# omicron
+B.1.1.529
+BA.1
+BA.2
+BA.3
+BA.4
+BA.5
+# capture all others
+A
+B
+Recombinant
