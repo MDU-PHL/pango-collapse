@@ -1,3 +1,5 @@
+# special
+BQ.1
 # alpha
 B.1.1.7
 # gamma
