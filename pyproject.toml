@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pango-collapse"
-version = "0.5.2"
+version = "0.5.3"
 description = ""
 authors = ["wytamma <wytamma.wirth@me.com>"]
 readme = "README.md"
