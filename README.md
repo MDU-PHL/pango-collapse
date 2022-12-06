@@ -11,7 +11,7 @@ CLI to collapse Pango linages for reporting
 
 Install from pypi with pip.
 
-```
+```bash
 pip install pango-collapse
 ```
 
@@ -19,7 +19,7 @@ pip install pango-collapse
 
 `pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). 
 
-```
+```bash
 $ cat input.csv
 ```
 | Lineage  | 
@@ -30,13 +30,13 @@ $ cat input.csv
 
 `pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the user defined collapse file the compressed lineage will be returned. Collapse up to either `A` or `B` by adding A and B to the collapse file. By default (i.e. if no collapse file is specified) `pango-collapse` uses the collapse file found [here](https://github.com/MDU-PHL/pango-collapse/blob/main/pango_collapse/collapse.txt). This file is dependant on the version of `pango-collapse`, use `--latest` to load the latest version of the collapse file from github at run time. 
 
-```
+```bash
 $ cat collapse.txt
 ```
-|      |
-| ---- |
-| BA.5 |
-| BE.1 |
+```
+BA.5
+BE.1 
+```
 
 `pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage) and `Lineage_family` (the lineage compressed up to) columns. 
 
@@ -63,8 +63,11 @@ Produce a nextclade.tsv file from a `nextclade` analysis (there is an example fi
 
 We are only interested in the major sub-lineages of omicron i.e. BA.1-BA.5. We can therefor make a collapse file with the following:
 
+```bash
+$ cat collapse.txt
 ```
-# omicron
+
+```
 BA.1
 BA.2
 BA.3
@@ -77,7 +80,7 @@ BA.5
 Run the following command to collapse the omicron sub-lineages:
 
 ```
-pango-collapse nextclade.tsv -o nextclade_collapsed_omicron.tsv -l Nextclade_pango --strict 
+pango-collapse -c collapse.txt -o nextclade_collapsed_omicron.tsv -l Nextclade_pango --strict nextclade.tsv 
 ```
 
 The `-l` (`--lineage-column`) flag tells `pango-collapse` to look for the compressed linage in the `Nextclade_pango` column in the nextclade.tsv file.
