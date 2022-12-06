@@ -20,20 +20,23 @@ pip install pango-collapse
 `pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). 
 
 ```
-# input.csv
-Lineage
-BA.5.2.1
-BA.4.6
-BE.1
+$ cat input.csv
 ```
+| Lineage  | 
+| ---------|
+| BA.5.2.1 |
+| BA.4.6   |
+| BE.1     |
 
 `pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the user defined collapse file the compressed lineage will be returned. Collapse up to either `A` or `B` by adding A and B to the collapse file. By default (i.e. if no collapse file is specified) `pango-collapse` uses the collapse file found [here](https://github.com/MDU-PHL/pango-collapse/blob/main/pango_collapse/collapse.txt). This file is dependant on the version of `pango-collapse`, use `--latest` to load the latest version of the collapse file from github at run time. 
 
 ```
-# collapse.txt
-BA.5
-BE.1
+$ cat collapse.txt
 ```
+|      |
+| ---- |
+| BA.5 |
+| BE.1 |
 
 `pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage) and `Lineage_family` (the lineage compressed up to) columns. 
 
@@ -43,12 +46,14 @@ pango-collapse input.csv --collapse-file collapse.txt -o output.csv
 ```
 
 ```
-# output.csv 
-Lineage,Lineage_full,Lineage_family
-BA.5.2.1,B.1.1.529.5.2.1,BA.5
-BA.4.6,B.1.1.529.4.6,BA.4.6
-BE.1,B.1.1.529.5.3.1.1,BE.1
+$ cat output.csv 
 ```
+
+| Lineage  | Lineage_full | Lineage_family | 
+| -------- | ------------ | -------------- |
+| BA.5.2.1 | B.1.1.529.5.2.1 | BA.5 |
+| BA.4.6   | B.1.1.529.4.6 | BA.4.6 |
+| BE.1     | B.1.1.529.5.3.1.1 | BE.1 |
 
 ## Nextclade example
 
