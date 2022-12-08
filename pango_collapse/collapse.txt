@@ -7,6 +7,7 @@ BA.4.6
 BQ.1
 BQ.1.1
 CH.1.1
+BR.2
 # recombinant
 XBB
 XBF
