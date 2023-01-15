@@ -10,6 +10,7 @@ CH.1.1
 BR.2
 # recombinant
 XBB
+XBB.1.5
 XBF
 XBC
 # alpha
