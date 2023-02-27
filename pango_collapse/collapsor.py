@@ -22,7 +22,7 @@ class Collapsor(Aliasor):
             if compressed_parent_lineage in potential_parents:
                 return compressed_parent_lineage
         
-        if compressed_lineage.startswith("X") and "Recombinant" in potential_parents:
+        if uncompressed_lineage.startswith("X") and "Recombinant" in potential_parents:
             # special case for Recombinant
             return "Recombinant"
 

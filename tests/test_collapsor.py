@@ -12,3 +12,13 @@ def test_collapse_column():
 
 def test_uncompress_column():
     assert ['B.1.1.529.5', 'B'] == collapsor.uncompress_column(("BA.5", "B"))
+
+def test_collapse_recombinants():
+    assert ["Recombinant", "Recombinant", "XBF.7"] == collapsor.collapse_column(
+        ['XBB.1.5.13', 'EL.1', "XBF.7.1"], 
+        ["Recombinant", "XBF.7"]
+    )
+
+def test_recombinant_sublineage():
+    compressed_lineage = 'EL.1'
+    assert "XBB.1" == collapsor.collapse(compressed_lineage, ["XBB.1"])
