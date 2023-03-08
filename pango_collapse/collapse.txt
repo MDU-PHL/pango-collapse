@@ -11,6 +11,7 @@ BR.2
 # recombinant
 XBB
 XBB.1.5
+XBB.1.9.1
 XBF
 XBC
 # alpha
