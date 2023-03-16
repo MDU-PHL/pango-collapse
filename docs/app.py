@@ -3,7 +3,7 @@ try:
 	import asyncio
 	from pyodide import create_proxy
 	from jhanley_html import HTML
-	from js import document, FileReader
+	from js import document, FileReader, download_table_as_csv
 	import csv
 	from pango_collapse import Collapsor
 	from pango_collapse.utils import load_potential_parents_from_file
@@ -21,7 +21,7 @@ def build_table(data, headers):
 
 		table_data.append(entry)
 
-	HTML().table(header_row=headers, table_data=table_data)
+	HTML().table(header_row=headers, table_data=table_data, id='table')
 
 def copy_file_to_local(url):
 	filename = url.split('/')[-1]
@@ -40,6 +40,9 @@ def collapse(data, lineage_col, collapse_col):
 	return collapsed_data
 
 async def process_file(event):
+	table_el = document.getElementById("table")
+	if table_el:
+		table_el.remove()
 	e = document.getElementById("loading")
 	e.style.display ='block'
 
@@ -59,8 +62,8 @@ async def process_file(event):
 		if collapse_col not in headers:
 			headers += [collapse_col]
 		build_table(collapsed_data, headers=headers) 
+		download_table_as_csv('table')
 	e.style.display ='none'
-
 
 async def main():
 	# Create a Python proxy for the callback function
