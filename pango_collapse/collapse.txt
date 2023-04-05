@@ -12,6 +12,7 @@ BR.2
 XBB
 XBB.1.5
 XBB.1.9.1
+XBB.1.16
 XBF
 XBC
 # alpha
