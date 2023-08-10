@@ -38,7 +38,7 @@ BA.5
 BE.1 
 ```
 
-`pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage) and `Lineage_family` (the lineage compressed up to) columns. 
+`pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage), `Lineage_expanded` (the expanded lineage format) and `Lineage_family` (the lineage collapsed up to) columns. 
 
 
 ```bash
@@ -49,11 +49,38 @@ pango-collapse input.csv --collapse-file collapse.txt -o output.csv
 $ cat output.csv 
 ```
 
-| Lineage  | Lineage_full | Lineage_family | 
-| -------- | ------------ | -------------- |
-| BA.5.2.1 | B.1.1.529.5.2.1 | BA.5 |
-| BA.4.6   | B.1.1.529.4.6 | BA.4.6 |
-| BE.1     | B.1.1.529.5.3.1.1 | BE.1 |
+| Lineage  | Lineage_full | Lineage_family | Lineage_expanded | 
+| -------- | ------------ | -------------- | ---------------- |
+| BA.5.2.1 | B.1.1.529.5.2.1 | BA.5 | B.1.1.529:BA.5.2.1 |
+| BA.4.6   | B.1.1.529.4.6 | BA.4.6 | B.1.1.529:BA.4.6 |
+| BE.1     | B.1.1.529.5.3.1.1 | BE.1 | B.1.1.529:BA.5.3.1:BE.1 |
+
+## Expanded lineage format
+
+The `Lineage_expanded` column provides and human readable and searchable version of pango linages. The delimiter (`:`) separates each alias level in the full lineage. You can determine the linage parental lineages of a lineage in expanded format by reading from right to left. For example in the lineage `B.1.1.529:BA.5.3.1:BE.1` we can see that `BE.1` comes from `BA.5.3.1` which inturn comes from `B.1.1.529`.
+
+Expanded lineages can be converted to full lineages by removing the delimiter and sub lineage letters. Collapsed lineages can be obtained by taking the final component of the expanded lineage.
+
+```bash
+$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
+B.1.1.529.5.3.1.1  # full lineage
+$ echo "B.1.1.529:BA.5.3.1:BE.1" | awk -F: '{print $NF}'
+BE.1  # compressed lineage
+```
+
+Lineages to the right of the delimiter are equivalent (although the parental lineages are implicit). 
+
+```python
+B.1.1.529:BA.5.3.1:BE.1 == BA.5.3.1:BE.1 == BE.1
+```
+
+Lineages in expanded format are easily searched with regex. Exact matches can be found by matching with the end of the expanded lineage using the `$` anchor e.g `:BE.1$` to exactly mach the BE.1 lineage. Sub lineages can be found by simply checking if the expanded lineage contains the parental lineage of interest.
+
+```bash
+$ grep ":BA.5" output.csv
+BA.5.2.1,B.1.1.529.5.2.1,BA.5,B.1.1.529:BA.5.2.1
+BE.1,B.1.1.529.5.3.1.1,BE.1,B.1.1.529:BA.5.3.1:BE.1
+```
 
 ## Nextclade example
 
@@ -129,6 +156,8 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │                                        [default: Lineage_full]                  │
 │    --collapse-column     -k      TEXT  Column to use for the collapsed output.  │
 │                                        [default: Lineage_family]                │
+|    --expand-column       -e      TEXT  Column to use for the expanded output.   |
+|                                        [default: Lineage_expanded]              |
 │    --alias-file          -a      PATH  Path to Pango Alias file for             │
 │                                        pango_aliasor. Will download latest file │
 │                                        if not supplied.                         │
