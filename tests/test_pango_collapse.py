@@ -31,6 +31,7 @@ def test_cli():
     output = pd.read_csv("tests/data/output.csv")
     assert expected.Lineage_full.equals(output.Lineage_full)
     assert expected.Lineage_family.equals(output.Lineage_family)
+    assert expected.Lineage_expanded.equals(output.Lineage_expanded)
 
 
 def test_nextclade():
@@ -56,3 +57,4 @@ def test_nextclade():
     output = pd.read_csv("tests/data/nextclade_output.tsv", sep="\t")
     assert expected.Lineage_full.equals(output.Lineage_full)
     assert expected.Lineage_family.equals(output.Lineage_family)
+    assert expected.Lineage_expanded.equals(output.Lineage_expanded)
