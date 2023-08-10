@@ -63,7 +63,7 @@ The `Lineage_expanded` column contains the lineage in exapaned format which prov
 B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1
 ```
 
-The delimiter (`:`) separates each alias level in the full lineage. You can determine the linage parental lineages of a lineage in expanded format by reading from right to left. For example, from the expanded lineage `B.1.1.529:BA.5.3.1:BE.1` we can see that `BE.1` comes from `BA.5.3.1` which inturn comes from `B.1.1.529`.
+The delimiter (`:`) separates each alias level in the full lineage. You can determine the parental lineages of a lineage in expanded format by reading from right to left. For example, from the expanded lineage `B.1.1.529:BA.5.3.1:BE.1` we can see that `BE.1` comes from `BA.5.3.1` which inturn comes from `B.1.1.529`.
 
 Expanded lineages can be converted to full lineages by removing the delimiters and sub-lineage letters. Collapsed lineages can be obtained by taking the final component of the expanded lineage.
 
