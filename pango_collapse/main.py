@@ -61,6 +61,12 @@ def main(
         "--collapse-column",
         help="Column to use for the collapsed output.",
     ),
+    expand_column: Optional[str] = typer.Option(
+        "Lineage_expanded",
+        "-e",
+        "--expand-column",
+        help="Column to use for the expanded output.",
+    ),
     alias_file: Optional[Path] = typer.Option(
         None,
         "-a",
@@ -108,6 +114,7 @@ def main(
     df = pd.read_csv(input, low_memory=False, sep=sep)
     
     df[full_column] = collapsor.uncompress_column(df[lineage_column])
+    df[expand_column] = collapsor.expand_column(df[full_column])
 
     if latest:
         print(f"Loading collapse file from {collapse_file_url}\n")
