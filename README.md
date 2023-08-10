@@ -57,9 +57,15 @@ $ cat output.csv
 
 ## Expanded lineage format
 
-The `Lineage_expanded` column provides and human readable and searchable version of pango linages. The delimiter (`:`) separates each alias level in the full lineage. You can determine the linage parental lineages of a lineage in expanded format by reading from right to left. For example in the lineage `B.1.1.529:BA.5.3.1:BE.1` we can see that `BE.1` comes from `BA.5.3.1` which inturn comes from `B.1.1.529`.
+The `Lineage_expanded` column contains the lineage in exapaned format which provides complete lineage information and searchability. 
 
-Expanded lineages can be converted to full lineages by removing the delimiter and sub lineage letters. Collapsed lineages can be obtained by taking the final component of the expanded lineage.
+```python
+B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1
+```
+
+The delimiter (`:`) separates each alias level in the full lineage. You can determine the linage parental lineages of a lineage in expanded format by reading from right to left. For example, from the expanded lineage `B.1.1.529:BA.5.3.1:BE.1` we can see that `BE.1` comes from `BA.5.3.1` which inturn comes from `B.1.1.529`.
+
+Expanded lineages can be converted to full lineages by removing the delimiters and sub-lineage letters. Collapsed lineages can be obtained by taking the final component of the expanded lineage.
 
 ```bash
 $ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
@@ -68,16 +74,16 @@ $ echo "B.1.1.529:BA.5.3.1:BE.1" | awk -F: '{print $NF}'
 BE.1  # compressed lineage
 ```
 
-Lineages to the right of the delimiter are equivalent (although the parental lineages are implicit). 
+Lineages to the right of a delimiter are equivalent (although the parental lineages are implicit). 
 
 ```python
 B.1.1.529:BA.5.3.1:BE.1 == BA.5.3.1:BE.1 == BE.1
 ```
 
-Lineages in expanded format are easily searched with regex. Exact matches can be found by matching with the end of the expanded lineage using the `$` anchor e.g `:BE.1$` to exactly mach the BE.1 lineage. Sub lineages can be found by simply checking if the expanded lineage contains the parental lineage of interest.
+Lineages in expanded format are easily searched. Exact matches can be found by matching with the end of the expanded lineage e.g. using the regex `$` anchor (`:BE.1$` to exactly match BE.1). Sub-lineages can be found by simply checking if the expanded lineage contains the parental lineage of interest.
 
 ```bash
-$ grep ":BA.5" output.csv
+$ grep ":BA.5" output.csv  # find all BA.5 sub-lineages
 BA.5.2.1,B.1.1.529.5.2.1,BA.5,B.1.1.529:BA.5.2.1
 BE.1,B.1.1.529.5.3.1.1,BE.1,B.1.1.529:BA.5.3.1:BE.1
 ```
