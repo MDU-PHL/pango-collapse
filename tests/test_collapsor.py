@@ -36,6 +36,9 @@ def test_expand():
     assert "B.1.1.529:BA.5" == collapsor.expand(
         "B.1.1.529.5"
     )
+    assert "XBB.1.9.2:EG.1" == collapsor.expand(
+        "EG.1"
+    )
 
 
 def test_expand_column():
