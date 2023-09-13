@@ -22,10 +22,10 @@ async def expand_lineage(event):
 	collapsor = Collapsor(alias_file="alias_key.json")
 	expanded_lineage = collapsor.expand(lineage)
 	e = document.getElementById("expanded")
-	e.value = expanded_lineage
+	e.innerText = expanded_lineage
 	full_lineage = collapsor.uncompress(lineage)
 	e = document.getElementById("full")
-	e.value = full_lineage
+	e.innerText = full_lineage
 	print(expanded_lineage)
 
 async def main():
