@@ -28,13 +28,13 @@
 
   <body>
     <!-- Load the Python main application file -->
-    <div class="max-w-md mx-auto">
+    <div class="max-w-2xl mx-auto">
       <div class="space-y-4">
         <div class="flex flex-col">
-          <h1 class="text-2xl block text-gray-700 font-bold mb-2">
+          <h1 class="text-2xl block font-bold mb-2">
             Expand Pango Lineage 
           </h1>
-          <div class="text-sm text-gray-500 mb-2">
+          <div class="mb-2">
             Expand Pango lineages with <a href="https://github.com/MDU-PHL/pango-collapse" class="border rounded-lg px-1 text-orange-500">
               pango-collapse</a> running completely in the client-side browser (via <a href="https://pyscript.net/" class="border rounded-lg px-1 text-green-500">PyScript</a>).
           </div> 
@@ -46,6 +46,40 @@
           </div>
         </div>
       </div>
+      
+      <div class="my-8">
+        <h2 class="text-lg font-bold" >Explanation</h2>
+        <p class="mb-4">
+            The expanded format provides complete lineage information and searchability.
+        </p>
+        <pre class="bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1</code></pre>
+
+        <p class="mt-4 mb-4">
+            The delimiter (<span class="font-bold">:</span>) separates each alias level in the full lineage. You can determine the parental lineages of a lineage in expanded format by reading from right to left. For example, from the expanded lineage <span class="font-bold">B.1.1.529:BA.5.3.1:BE.1</span> we can see that <span class="font-bold">BE.1</span> comes from <span class="font-bold">BA.5.3.1</span> which in turn comes from <span class="font-bold">B.1.1.529</span>.
+        </p>
+
+        <div class="bg-gray-200 p-4 rounded">
+            <pre class="text-purple-700"><code>$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
+B.1.1.529.5.3.1.1  # full lineage
+$ echo "B.1.1.529:BA.5.3.1:BE.1" | awk -F: '{print $NF}'
+BE.1  # compressed lineage</code></pre>
+        </div>
+
+        <p class="mt-4 mb-4">
+            Lineages to the right of a delimiter are equivalent (although the parental lineages are implicit).
+        </p>
+        <pre class="bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == BA.5.3.1:BE.1 == BE.1</code></pre>
+
+        <p class="mt-4 mb-4">
+            Lineages in expanded format are easily searched. Exact matches can be found by matching with the end of the expanded lineage e.g. using the regex <span class="font-bold">$</span> anchor (<span class="font-bold">:BE.1$</span> to exactly match BE.1). Sub-lineages can be found by simply checking if the expanded lineage contains the parental lineage of interest.
+        </p>
+
+        <div class="bg-gray-200 p-4 rounded">
+            <pre class="text-purple-700"><code>$ grep ":BA.5" output.csv  # find all BA.5 sub-lineages
+BA.5.2.1,B.1.1.529.5.2.1,BA.5,B.1.1.529:BA.5.2.1
+BE.1,B.1.1.529.5.3.1.1,BE.1,B.1.1.529:BA.5.3.1:BE.1</code></pre>
+        </div>
+    </div>
     </div>
     <py-script src="expand.py"></py-script>
   </body>
