@@ -28,7 +28,7 @@
 
   <body>
     <!-- Load the Python main application file -->
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-2xl mx-2">
       <div class="space-y-4">
         <div class="flex flex-col">
           <h1 class="text-2xl block font-bold mb-2">
@@ -39,10 +39,12 @@
               pango-collapse</a> running completely in the client-side browser (via <a href="https://pyscript.net/" class="border rounded-lg px-1 text-green-500">PyScript</a>).
           </div> 
           <div>
-              <label for="lineage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Compressed Pango Lineage</label>
+              <label for="lineage" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Compressed Pango Lineage</label>
               <input id="lineage" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="DV.7.1" required>
-              <label for="expanded" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Expanded Pango Lineage</label>
-              <input id="expanded" disabled class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="B.1.1.529:BA.2.75.3:BM.4.1.1:CH.1.1.1:DV.7.1">
+              <label for="full" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Uncompressed Pango Lineage</label>
+              <input id="full" disabled class="bg-gray-50 mb-2 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="B.1.1.529.2.75.3.4.1.1.1.1.1.7.1">
+              <label for="expanded" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Expanded Pango Lineage</label>
+              <input id="expanded" disabled class="bg-gray-50 mb-2 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="B.1.1.529:BA.2.75.3:BM.4.1.1:CH.1.1.1:DV.7.1">
           </div>
         </div>
       </div>
@@ -52,14 +54,14 @@
         <p class="mb-4">
             The expanded format provides complete lineage information and searchability.
         </p>
-        <pre class="bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1</code></pre>
+        <pre class=" overflow-scroll bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1</code></pre>
 
         <p class="mt-4 mb-4">
             The delimiter (<span class="font-bold">:</span>) separates each alias level in the full lineage. You can determine the parental lineages of a lineage in expanded format by reading from right to left. For example, from the expanded lineage <span class="font-bold">B.1.1.529:BA.5.3.1:BE.1</span> we can see that <span class="font-bold">BE.1</span> comes from <span class="font-bold">BA.5.3.1</span> which in turn comes from <span class="font-bold">B.1.1.529</span>.
         </p>
 
         <div class="bg-gray-200 p-4 rounded">
-            <pre class="text-purple-700"><code>$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
+            <pre class=" overflow-scroll text-purple-700"><code>$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
 B.1.1.529.5.3.1.1  # full lineage
 $ echo "B.1.1.529:BA.5.3.1:BE.1" | awk -F: '{print $NF}'
 BE.1  # compressed lineage</code></pre>
@@ -68,14 +70,14 @@ BE.1  # compressed lineage</code></pre>
         <p class="mt-4 mb-4">
             Lineages to the right of a delimiter are equivalent (although the parental lineages are implicit).
         </p>
-        <pre class="bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == BA.5.3.1:BE.1 == BE.1</code></pre>
+        <pre class=" overflow-scroll bg-gray-200 p-4 rounded"><code class="text-purple-700">B.1.1.529:BA.5.3.1:BE.1 == BA.5.3.1:BE.1 == BE.1</code></pre>
 
         <p class="mt-4 mb-4">
             Lineages in expanded format are easily searched. Exact matches can be found by matching with the end of the expanded lineage e.g. using the regex <span class="font-bold">$</span> anchor (<span class="font-bold">:BE.1$</span> to exactly match BE.1). Sub-lineages can be found by simply checking if the expanded lineage contains the parental lineage of interest.
         </p>
 
         <div class="bg-gray-200 p-4 rounded">
-            <pre class="text-purple-700"><code>$ grep ":BA.5" output.csv  # find all BA.5 sub-lineages
+            <pre class=" overflow-scroll text-purple-700"><code>$ grep ":BA.5" output.csv  # find all BA.5 sub-lineages
 BA.5.2.1,B.1.1.529.5.2.1,BA.5,B.1.1.529:BA.5.2.1
 BE.1,B.1.1.529.5.3.1.1,BE.1,B.1.1.529:BA.5.3.1:BE.1</code></pre>
         </div>
