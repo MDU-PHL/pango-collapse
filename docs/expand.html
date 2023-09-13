@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pango Collapse</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Load error_handler.js script before other scripts -->
+    <script src="js/error_handler.js"></script>
+
+    <!-- Load required PyScript packages -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"onerror=scriptLoadFailure('pyscr ipt.js')></script>
+
+    <link rel="stylesheet" href="css/table.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
+
+    <!-- Load required Python packages -->
+    <py-env>
+    - pango-collapse
+    - paths:
+      - error_handler.py
+      - jhanley_html.py
+    </py-env>
+  </head>
+
+  <body>
+    <!-- Load the Python main application file -->
+    <div class="max-w-md mx-auto">
+      <div class="space-y-4">
+        <div class="flex flex-col">
+          <h1 class="text-2xl block text-gray-700 font-bold mb-2">
+            Expand Pango Lineage 
+          </h1>
+          <div class="text-sm text-gray-500 mb-2">
+            Expand Pango lineages with <a href="https://github.com/MDU-PHL/pango-collapse" class="border rounded-lg px-1 text-orange-500">
+              pango-collapse</a> running completely in the client-side browser (via <a href="https://pyscript.net/" class="border rounded-lg px-1 text-green-500">PyScript</a>).
+          </div> 
+          <div>
+              <label for="lineage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Compressed Pango Lineage</label>
+              <input id="lineage" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="DV.7.1" required>
+              <label for="expanded" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Expanded Pango Lineage</label>
+              <input id="expanded" disabled class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="B.1.1.529:BA.2.75.3:BM.4.1.1:CH.1.1.1:DV.7.1">
+          </div>
+        </div>
+      </div>
+    </div>
+    <py-script src="expand.py"></py-script>
+  </body>
+</html>

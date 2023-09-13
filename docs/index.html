@@ -39,13 +39,13 @@
               pango-collapse</a> running completely in the client-side browser (via <a href="https://pyscript.net/" class="border rounded-lg px-1 text-green-500">PyScript</a>) i.e. <span class="font-bold">your data never leaves your computer</span>. This app works best with Nextclade <span class="border rounded-lg px-1 text-slate-500">.tsv</span> files.
           </div> 
           <div>
-              <label for="lineage_col" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lineage Column</label>
+              <label for="lineage_col" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lineage Column Name</label>
               <input id="lineage_col" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="Nextclade_pango" required>
           </div>
           <div>
-            <label for="collapse_col" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Collapse Column</label>
-            <input id="collapse_col" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="Lineage_family" required>
-          </div>
+            <label for="collapse_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Collapse File</label>
+            <input id="collapse_file" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt" required>
+        </div>
           <input class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  id="myfile" name="myfile" type="file">
         </div>
       </div>
