@@ -86,9 +86,9 @@ def main(
         help="Load the collapse from from a url (--url).",
     ),
     collapse_file_url: Optional[str] = typer.Option(
-        "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt",
+        None,
         "--url",
-        help="Url to use when loading the collapse file with --latest.",
+        help="Url to use when loading the collapse file with --latest. https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt",
     ),
     version: Optional[bool] = typer.Option(
         None,
@@ -116,7 +116,9 @@ def main(
     df[full_column] = collapsor.uncompress_column(df[lineage_column])
     df[expand_column] = collapsor.expand_column(df[full_column])
 
-    if latest:
+    if latest or collapse_file_url is not None:
+        if collapse_file_url is None:
+            collapse_file_url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
         print(f"Loading collapse file from {collapse_file_url}\n")
         potential_parents = load_potential_parents_from_url(url=collapse_file_url)
     else:
