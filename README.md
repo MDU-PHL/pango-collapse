@@ -113,7 +113,12 @@ BA.5
 Run the following command to collapse the omicron sub-lineages:
 
 ```
-pango-collapse -c collapse.txt -o nextclade_collapsed_omicron.tsv -l Nextclade_pango --strict nextclade.tsv 
+pango-collapse \
+  -c collapse.txt \
+  -o nextclade_collapsed_omicron.tsv \
+  -l Nextclade_pango \
+  --strict \
+  nextclade.tsv 
 ```
 
 The `-l` (`--lineage-column`) flag tells `pango-collapse` to look for the compressed lineage in the `Nextclade_pango` column in the nextclade.tsv file.
