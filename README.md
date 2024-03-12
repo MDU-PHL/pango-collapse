@@ -47,7 +47,7 @@ BQ.1
 
 
 ```bash
-pango-collapse input.csv --collapse-file collapse.txt -o output.csv 
+$ pango-collapse input.csv --collapse-file collapse.txt -o output.csv 
 ```
 
 ```
