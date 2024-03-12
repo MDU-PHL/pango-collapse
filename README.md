@@ -4,7 +4,7 @@
 [![tests](https://github.com/MDU-PHL/pango-collapse/actions/workflows/tests.yaml/badge.svg)](https://github.com/MDU-PHL/pango-collapse/actions/workflows/tests.yaml)
 [![DOI](https://zenodo.org/badge/532809949.svg)](https://zenodo.org/doi/10.5281/zenodo.10347041)
 
-CLI to collapse Pango lineages for reporting
+CLI to collapse Pango lineages up to user defined parent lineages for reporting.
 
 [![](images/collapse.gif)](https://mdu-phl.github.io/pango-watch/tree/)
 
