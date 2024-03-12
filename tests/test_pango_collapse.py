@@ -2,7 +2,7 @@ from typer.testing import CliRunner
 
 from pango_collapse.main import app
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 def test_help():
@@ -58,3 +58,18 @@ def test_nextclade():
     assert expected.Lineage_full.equals(output.Lineage_full)
     assert expected.Lineage_family.equals(output.Lineage_family)
     assert expected.Lineage_expanded.equals(output.Lineage_expanded)
+
+def test_error_no_input():
+    result = runner.invoke(app, ["-o", "tests/data/output.csv"])
+    assert result.exit_code == 2
+    assert "Missing argument 'INPUT'." in result.stderr
+
+def test_missing_collapse_file():
+    result = runner.invoke(app, ["tests/data/input.csv", "-c", "does_not_exist.txt"])
+    assert result.exit_code == 1
+    assert "Could not find collapse file: does_not_exist.txt" in result.stderr
+
+def test_missing_lineage_column():
+    result = runner.invoke(app, ["tests/data/input.csv", "-l", "does_not_exist"])
+    assert result.exit_code == 1
+    assert "Could not find lineage column: does_not_exist" in result.stderr
