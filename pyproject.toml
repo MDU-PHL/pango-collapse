@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pango-collapse"
 version = "0.7.3"
-description = ""
+description = "Collapse Pango sublineages up to user defined parent lineages."
 authors = ["wytamma <wytamma.wirth@me.com>"]
 readme = "README.md"
 
