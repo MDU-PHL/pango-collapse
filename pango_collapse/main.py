@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Optional
+from urllib.error import URLError
 import typer
 import sys
 from .utils import load_potential_parents_from_file, load_potential_parents_from_url
@@ -36,12 +37,13 @@ def main(
         "--output",
         help="Path to output CSV/TSV with Lineage column. If not supplied will print to stdout.",
         dir_okay=False,
+        show_default=False,
     ),
-    collapse_file: Optional[Path] = typer.Option(
+    collapse_file: Optional[str] = typer.Option(
         f"{Path(__file__).parent.resolve()}/collapse.txt",
         "-c",
         "--collapse-file",
-        help="Path to collapse file with lineages (one per line) to collapse up to. Defaults to collapse file shipped with this version of pango-collapse.",
+        help="Path or URL to collapse file with lineages (one per line) to collapse up to. Defaults to collapse file shipped with this version of pango-collapse.",
     ),
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
@@ -72,6 +74,7 @@ def main(
         "-a",
         "--alias-file",
         help="Path to Pango Alias file for pango_aliasor. Will download latest file if not supplied.",
+        show_default=False,
     ),
     strict: Optional[bool] = typer.Option(
         False,
@@ -83,11 +86,12 @@ def main(
         False,
         "-u",
         "--latest",
-        help="Load the collapse from from a url (--url).",
+        help="Load the latest collapse from from https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt.",
     ),
     collapse_file_url: Optional[str] = typer.Option(
         None,
         "--url",
+        hidden=True,
         help="Url to use when loading the collapse file with --latest. https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt",
     ),
     version: Optional[bool] = typer.Option(
@@ -111,20 +115,39 @@ def main(
     sep = "\t" if input.suffix == ".tsv" else ","
 
     df = pd.read_csv(input, low_memory=False, sep=sep)
+    
     if lineage_column not in df.columns:
         print(f"[red]Could not find lineage column: {lineage_column}[red]", file=sys.stderr)
         raise typer.Exit(code=1)
-
-    if latest or collapse_file_url is not None:
+    
+    if not collapse_file.startswith("http") and not Path(collapse_file).exists():
+        print(f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr)
+        raise typer.Exit(code=1)
+    
+    if collapse_file_url:
+        # deprecated
+        print(
+            "[yellow bold]The --url option is deprecated and will be removed in a future version. Please use --collapse-file instead.[yellow]",
+            file=sys.stderr,
+        )
+        collapse_file = collapse_file_url
+    
+    if latest:
         if collapse_file_url is None:
             collapse_file_url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
-        print(f"Loading collapse file from {collapse_file_url}\n", file=sys.stderr)
-        potential_parents = load_potential_parents_from_url(url=collapse_file_url)
-    else:
-        if not collapse_file.exists():
-            print(f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr)
+        collapse_file = collapse_file_url
+    
+    if collapse_file.startswith("http"):
+        print(f"Loading collapse file from {collapse_file}\n", file=sys.stderr)
+        try:
+            potential_parents = load_potential_parents_from_url(url=collapse_file)
+        except URLError:
+            print(f"[red]Could not download collapse file from {collapse_file}[red]", file=sys.stderr)
             raise typer.Exit(code=1)
+    else:
+        collapse_file = Path(collapse_file)
         potential_parents = load_potential_parents_from_file(collapse_file=collapse_file)
+    
     print("[yellow]Collapsing up to the following lineages:[yellow]", file=sys.stderr)
     print(" -", "\n - ".join(potential_parents), file=sys.stderr)
     

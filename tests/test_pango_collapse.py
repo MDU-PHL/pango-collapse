@@ -73,3 +73,9 @@ def test_missing_lineage_column():
     result = runner.invoke(app, ["tests/data/input.csv", "-l", "does_not_exist"])
     assert result.exit_code == 1
     assert "Could not find lineage column: does_not_exist" in result.stderr
+
+def test_url_raises_deprecation_warning():
+    result = runner.invoke(app, ["tests/data/input.csv", "--url", "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"])
+    assert result.exit_code == 0
+    #  catch deprecation warning
+    assert "--url option is deprecated" in result.stderr
