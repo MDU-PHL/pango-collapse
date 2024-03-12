@@ -37,8 +37,6 @@ Here is a example collapse file (collapse.txt) that will be used to collapse sub
 
 ```bash
 $ cat collapse.txt
-```
-```
 BA.5
 BQ.1 
 ```
