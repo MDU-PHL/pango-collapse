@@ -18,7 +18,7 @@ pip install pango-collapse
 
 ## Usage
 
-`pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). 
+`pango-collapse` takes a CSV file of SARS-CoV-2 samples (`input.csv`) with a column (default `Lineage`) indicating the compressed pango lineage of the samples (e.g. output from pangoLEARN, nextclade, USHER, etc). 
 
 ```bash
 $ cat input.csv
