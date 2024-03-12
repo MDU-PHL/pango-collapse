@@ -157,11 +157,10 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │    --output              -o      FILE  Path to output CSV/TSV with Lineage      │
 │                                        column. If not supplied will print to    │
 │                                        stdout.                                  │
-│                                        [default: None]                          │
-│    --collapse-file       -c      PATH  Path to collapse file with lineages (one │
-│                                        per line) to collapse up to. Defaults to │
-│                                        collapse file shipped with this version  │
-│                                        of pango-collapse.                       │
+│    --collapse-file       -c      PATH  Path or URL to collapse file with        │
+│                                        lineages (one per line) to collapse up   │
+│                                        to. Defaults to collapse file shipped    │
+│                                        with this version of pango-collapse.     │
 │                                        [default:                                │
 │                                        /Users/wwirth/Library/CloudStorage/OneD… │
 │    --lineage-column      -l      TEXT  Column to extract from input file for    │
@@ -177,16 +176,11 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │    --alias-file          -a      PATH  Path to Pango Alias file for             │
 │                                        pango_aliasor. Will download latest file │
 │                                        if not supplied.                         │
-│                                        [default: None]                          │
 │    --strict              -s            If a lineage is not in the collapse file │
 │                                        return None instead of the compressed    │
 │                                        lineage.                                 │
 │    --latest              -u            Load the collapse from from a url        │
 │                                        (--url).                                 │
-│    --url                         TEXT  Url to use when loading the collapse     │
-│                                        file with --latest.                      │
-│                                        [default:                                │
-│                                        https://raw.githubusercontent.com/MDU-P… │
 │    --version             -v            Print the current version number and     │
 │                                        exit.                                    │
 │    --install-completion                Install completion for the current       │
