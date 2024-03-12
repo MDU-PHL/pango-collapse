@@ -150,10 +150,10 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │                       [required]                                                │
 ╰─────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ───────────────────────────────────────────────────────────────────────╮
-│ *  --output              -o      FILE  Path to output CSV/TSV with Lineage      │
-│                                        column.                                  │
+│    --output              -o      FILE  Path to output CSV/TSV with Lineage      │
+│                                        column. If not supplied will print to    │
+│                                        stdout.                                  │
 │                                        [default: None]                          │
-│                                        [required]                               │
 │    --collapse-file       -c      PATH  Path to collapse file with lineages (one │
 │                                        per line) to collapse up to. Defaults to │
 │                                        collapse file shipped with this version  │
