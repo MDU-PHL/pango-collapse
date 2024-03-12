@@ -44,6 +44,11 @@ jobs:
       #----------------------------------------------
       - name: Install library
         run: poetry install --no-interaction
+      - name: Add latest alias key 
+        run: |
+          wget \
+            https://raw.githubusercontent.com/cov-lineages/pango-designation/master/pango_designation/alias_key.json \
+            -O pango_collapse/alias_key.json
       - name: Build library
         run: poetry build
       - name: Publish library
