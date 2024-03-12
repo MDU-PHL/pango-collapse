@@ -12,9 +12,9 @@ def load_potential_parents_from_url(
             potential_parents += data.read().decode("utf-8").strip().split("\n")
     except URLError:
         raise URLError(f"Could not download collapse file from {url}.")
-    return [l.strip() for l in potential_parents if not l.startswith("#")]
+    return [line.strip() for line in potential_parents if not line.startswith("#")]
 
 def load_potential_parents_from_file(collapse_file: str) -> List[str]:
     with open(collapse_file) as f:
         potential_parents = [l.strip() for l in f.readlines() if l.strip()]
-    return [l for l in potential_parents if not l.startswith("#")]
+    return [line for line in potential_parents if not line.startswith("#")]
