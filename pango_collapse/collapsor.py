@@ -9,11 +9,9 @@ class Collapsor(Aliasor):
         try:
             super().__init__(alias_file=alias_file)
         except URLError:
-            import warnings
+            from warnings import warn
             from pathlib import Path
-            warnings.warn(
-                f"Could not download alias file from {alias_file}. Using default alias file which may be out of date."
-            )
+            warn("""\n\nCould not download the alias_key file!\n\nUsing default the alias_key file which may be out of date. This may result in lineages that cannot be collapsed.\n\nThe alias_key is should be kept up to date because it contains the hierarchical information about lineages designations.\n\nTo specify a custom alias file use the `--alias-file` option.\n""")
             alias_file = Path(__file__).parent / "alias_key.json"
             super().__init__(alias_file=alias_file)
 
