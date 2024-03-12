@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 import typer
-
+import sys
 from .utils import load_potential_parents_from_file, load_potential_parents_from_url
 from .collapsor import Collapsor
 from rich import print
@@ -18,7 +18,7 @@ def get_version():
 def version_callback(value: bool):
     if value:
         version = get_version()
-        print(f"pango-collapse {version}")
+        print(f"pango-collapse {version}", file=sys.stderr)
         raise typer.Exit()
 
 
@@ -31,10 +31,10 @@ def main(
         exists=True,
     ),
     output: Path = typer.Option(
-        ...,
+        None,
         "-o",
         "--output",
-        help="Path to output CSV/TSV with Lineage column.",
+        help="Path to output CSV/TSV with Lineage column. If not supplied will print to stdout.",
         dir_okay=False,
     ),
     collapse_file: Optional[Path] = typer.Option(
@@ -103,31 +103,38 @@ def main(
     Collapse Pango sublineages up to user defined parent lineages.
     """
     version = get_version()
-    print(f"\n[bold green]pango-collapse {version}[bold green]\n")
+    print(f"\n[bold green]pango-collapse {version}[bold green]\n", file=sys.stderr)
     import pandas as pd
 
     collapsor = Collapsor(alias_file=alias_file)
 
-    sep = ","
-    if input.suffix == ".tsv":
-        sep = "\t"
+    sep = "\t" if input.suffix == ".tsv" else ","
+
     df = pd.read_csv(input, low_memory=False, sep=sep)
-    
-    df[full_column] = collapsor.uncompress_column(df[lineage_column])
-    df[expand_column] = collapsor.expand_column(df[full_column])
+    if lineage_column not in df.columns:
+        print(f"[red]Could not find lineage column: {lineage_column}[red]", file=sys.stderr)
+        raise typer.Exit(code=1)
 
     if latest or collapse_file_url is not None:
         if collapse_file_url is None:
             collapse_file_url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
-        print(f"Loading collapse file from {collapse_file_url}\n")
+        print(f"Loading collapse file from {collapse_file_url}\n", file=sys.stderr)
         potential_parents = load_potential_parents_from_url(url=collapse_file_url)
     else:
+        if not collapse_file.exists():
+            print(f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr)
+            raise typer.Exit(code=1)
         potential_parents = load_potential_parents_from_file(collapse_file=collapse_file)
-    print("[yellow]Collapsing up to the following lineages:[yellow]")
-    print(" -", "\n - ".join(potential_parents))
+    print("[yellow]Collapsing up to the following lineages:[yellow]", file=sys.stderr)
+    print(" -", "\n - ".join(potential_parents), file=sys.stderr)
+    
+    df[full_column] = collapsor.uncompress_column(df[lineage_column])
+    df[expand_column] = collapsor.expand_column(df[full_column])
     df[collapse_column] = collapsor.collapse_column(df[lineage_column], potential_parents=potential_parents, strict=strict)
     
-    sep = ","
-    if output.suffix == ".tsv":
-        sep = "\t"
-    df.to_csv(output, index=False, sep=sep)
+    if output:
+        sep = "\t" if output.suffix == ".tsv" else ","
+        df.to_csv(output, index=False, sep=sep)
+    else:
+        df.to_csv(sys.stdout, index=False, sep=sep)
+
