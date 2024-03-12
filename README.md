@@ -33,7 +33,7 @@ $ cat input.csv
 
 By default (i.e. if no collapse file is specified) `pango-collapse` uses the collapse file found [here](https://github.com/MDU-PHL/pango-collapse/blob/main/pango_collapse/collapse.txt). This file is dependant on the version of `pango-collapse`, use `--latest` to load the latest version of the collapse file from github at run time. 
 
-Here is a example collapse file (collapse.txt) that will be used to collapse sublineages of BA.5 and BQ.1 up to these parent lineages.
+Here is a example collapse file (collapse.txt) that will be used to collapse sublineages of `BA.5` and `BQ.1` up to these parent lineages.
 
 ```bash
 $ cat collapse.txt
