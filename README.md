@@ -23,22 +23,24 @@ pip install pango-collapse
 ```bash
 $ cat input.csv
 ```
-| Lineage  | 
-| ---------|
-| BA.5.2.1 |
-| BA.4.6   |
-| BE.1     |
+| Sample | Lineage  | 
+| ------ | ---------|
+| 1      | BA.5.2.1 |
+| 2      | BA.4.6   |
+| 3      | BE.1     |
 
 `pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the user defined collapse file the original compressed lineage will be returned. The highest level you can collapse up to is either `A` or `B` by adding A and B to the collapse file. 
 
 By default (i.e. if no collapse file is specified) `pango-collapse` uses the collapse file found [here](https://github.com/MDU-PHL/pango-collapse/blob/main/pango_collapse/collapse.txt). This file is dependant on the version of `pango-collapse`, use `--latest` to load the latest version of the collapse file from github at run time. 
+
+Here is a example collapse file (collapse.txt) that will be used to collapse sublineages of BA.5 and BQ.1 up to these parent lineages.
 
 ```bash
 $ cat collapse.txt
 ```
 ```
 BA.5
-BE.1 
+BQ.1 
 ```
 
 `pango-collapse` will produce an output file which is a copy of the input file plus `Lineage_full` (the uncompressed lineage), `Lineage_expanded` (the expanded lineage format) and `Lineage_family` (the lineage collapsed up to) columns. 
@@ -52,11 +54,13 @@ pango-collapse input.csv --collapse-file collapse.txt -o output.csv
 $ cat output.csv 
 ```
 
-| Lineage  | Lineage_full | Lineage_family | Lineage_expanded | 
-| -------- | ------------ | -------------- | ---------------- |
-| BA.5.2.1 | B.1.1.529.5.2.1 | BA.5 | B.1.1.529:BA.5.2.1 |
-| BA.4.6   | B.1.1.529.4.6 | BA.4.6 | B.1.1.529:BA.4.6 |
-| BE.1     | B.1.1.529.5.3.1.1 | BE.1 | B.1.1.529:BA.5.3.1:BE.1 |
+| Sample | Lineage  | Lineage_full | Lineage_family | Lineage_expanded | 
+| ------ | -------- | ------------ | -------------- | ---------------- |
+| 1      | BA.5.2.1 | B.1.1.529.5.2.1 | BA.5 | B.1.1.529:BA.5.2.1 |
+| 2      | BA.4.6   | B.1.1.529.4.6 | BA.4.6 | B.1.1.529:BA.4.6 |
+| 3      | BE.1     | B.1.1.529.5.3.1.1 | BA.5 | B.1.1.529:BA.5.3.1:BE.1 |
+
+Here we can see that samples 1 and 3 were collapsed to `BA.5`. Sample 1 (`BA.5.2.1`) and 3 (`BE.1`) are both sublineages of `BA.5` and `BA.5` is returned in the `Lineage_family` column. None of the parents of `BA.4.6` (sample 2) are in the collapse file and so the orginal lineage is returned. None of the samples match `BQ.1` (the other lineage in the collapse file) and so it is ignored.
 
 ## Expanded lineage format
 
