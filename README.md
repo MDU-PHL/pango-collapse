@@ -58,7 +58,7 @@ $ cat output.csv
 
 ## Expanded lineage format
 
-The `Lineage_expanded` column contains the lineage in exapaned format which provides complete lineage information and searchability. 
+The `Lineage_expanded` column contains the lineage in expanded format which provides complete lineage information and searchability. 
 
 ```python
 B.1.1.529:BA.5.3.1:BE.1 == B.1.1.529.5.3.1.1 == BE.1
