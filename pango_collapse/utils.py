@@ -1,4 +1,5 @@
 from typing import List
+from urllib.error import URLError
 
 
 def load_potential_parents_from_url(
@@ -6,8 +7,11 @@ def load_potential_parents_from_url(
     ) -> List[str]:
     import urllib.request
     potential_parents = []
-    with urllib.request.urlopen(url) as data:
-        potential_parents += data.read().decode("utf-8").strip().split("\n")
+    try:
+        with urllib.request.urlopen(url) as data:
+            potential_parents += data.read().decode("utf-8").strip().split("\n")
+    except URLError:
+        raise URLError(f"Could not download collapse file from {url}.")
     return [l.strip() for l in potential_parents if not l.startswith("#")]
 
 def load_potential_parents_from_file(collapse_file: str) -> List[str]:

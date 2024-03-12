@@ -1,11 +1,23 @@
 from typing import List
+from urllib.error import URLError
 from pango_aliasor.aliasor import Aliasor
 import pandas as pd
 
 
 class Collapsor(Aliasor):
     def __init__(self, alias_file=None):
-        super().__init__(alias_file=alias_file)
+        try:
+            super().__init__(alias_file=alias_file)
+        except URLError:
+            import warnings
+            from pathlib import Path
+            warnings.warn(
+                f"Could not download alias file from {alias_file}. Using default alias file which may be out of date."
+            )
+            alias_file = Path(__file__).parent / "alias_key.json"
+            super().__init__(alias_file=alias_file)
+
+
 
     def collapse(
         self, compressed_lineage: str, potential_parents: List[str], strict=False
