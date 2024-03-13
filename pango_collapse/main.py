@@ -11,10 +11,41 @@ app = typer.Typer()
 
 
 def get_version():
+    """
+    Retrieves the version of the pango-collapse package.
+
+    Returns:
+      str: The version of the pango-collapse package.
+
+    Side Effects:
+      This function imports the importlib.metadata module.
+
+    Examples:
+      >>> get_version()
+      '1.0.0'
+    """
     import importlib.metadata
     return importlib.metadata.version("pango-collapse")
 
 def version_callback(value: bool):
+    """
+    Prints the version of the pango-collapse package and exits the program if the value is True.
+
+    Args:
+      value (bool): A flag to determine whether to print the version and exit the program.
+
+    Raises:
+      typer.Exit: This exception is raised to exit the program.
+
+    Side Effects:
+      This function prints to the console and may exit the program.
+
+    Examples:
+      >>> version_callback(True)
+      pango-collapse 1.0.0
+      >>> version_callback(False)
+      # No output and the program continues to run.
+    """
     if value:
         version = get_version()
         print(f"pango-collapse {version}")
