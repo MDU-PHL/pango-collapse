@@ -149,6 +149,29 @@ df.Lineage_family.value_counts().plot(kind='bar')
 
 ![](images/nextclade_omicron.jpg)
 
+## Hosting collapse files
+
+You can host your own collapse files and then use them with `pango-collapse` to ensure that your reporting is always up to date. The simplest way to host a collapse file is on GitHub. You can then pass the url to `pango-collapse` using the `--collapse-file` (`-c`) flag.
+
+```bash
+pango-collapse \
+  tests/data/input.csv \
+  -c https://raw.githubusercontent.com/path/to/your/collapse_file.txt \
+  -o collapsed.csv
+```
+
+This also has the advantage that non-technical users can update the collapse file without needing to interact with your reporting pipeline. For example, a genomic epidemiologist or government agency official could use the GitHub GUI to make a PR to your repository to add or remove lineages from the collapse file. Then the next time your pipeline runs it will pull in the updated collapse file.
+
+[Austrakka](https://github.com/AusTrakka/VOC-watch/tree/master/collapse_files) maintains Variant of Concern collapse files from several major public health agencies including the [WHO](https://www.who.int/activities/tracking-SARS-CoV-2-variants), [UKHSA](https://www.gov.uk/government/publications/sars-cov-2-genome-sequence-prevalence-and-growth-rate), and the [CDC](https://www.cdc.gov/coronavirus/2019-ncov/variants/variant-classifications.html). You can use [these collapse files](https://github.com/AusTrakka/VOC-watch/tree/master/collapse_files) to report on the lineages of interest to these agencies.
+
+```bash
+# Collapse to the Variant of Concern lineages according to the CDC
+pango-collapse tests/data/input.csv \
+  -c https://raw.githubusercontent.com/AusTrakka/VOC-watch/master/collapse_files/cdc.txt \
+  -o cdc_collapsed.csv \
+  --strict
+```
+
 ## --help
 
 ```                                                                      
@@ -201,4 +224,5 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │                                        installation.                            │
 │    --help                -h            Show this message and exit.              │
 ╰─────────────────────────────────────────────────────────────────────────────────╯
+
 ```
