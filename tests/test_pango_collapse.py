@@ -69,8 +69,7 @@ def test_parents():
 
 def test_error_no_input():
     result = runner.invoke(app, ["-o", "tests/data/output.csv"])
-    assert result.exit_code == 2
-    assert "Missing argument 'INPUT'." in result.stderr
+    assert result.exit_code == 1
 
 def test_missing_collapse_file():
     result = runner.invoke(app, ["tests/data/input.csv", "-c", "does_not_exist.txt"])

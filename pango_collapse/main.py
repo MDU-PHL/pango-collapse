@@ -6,6 +6,7 @@ import sys
 from .utils import load_potential_parents_from_file, load_potential_parents_from_url
 from .collapsor import Collapsor
 from rich import print
+import pandas as pd
 
 app = typer.Typer()
 
@@ -54,11 +55,12 @@ def version_callback(value: bool):
 
 @app.command(context_settings={"help_option_names": ["-h", "--help"]})
 def main(
-    input: Path = typer.Argument(
-        ...,
+    input: typer.FileText = typer.Argument(
+        ... if sys.stdin.isatty() else sys.stdin,
         help="Path to input CSV/TSV with Lineage column.",
         dir_okay=False,
         exists=True,
+        show_default=False,
     ),
     output: Path = typer.Option(
         None,
@@ -112,6 +114,7 @@ def main(
         "--alias-file",
         help="Path to Pango Alias file for pango_aliasor. Will download latest file if not supplied.",
         show_default=False,
+        dir_okay=False,
     ),
     strict: Optional[bool] = typer.Option(
         False,
@@ -124,6 +127,12 @@ def main(
         "-u",
         "--latest",
         help="Load the latest collapse from from https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt.",
+    ),
+    tsv: bool = typer.Option(
+        False,
+        "--tsv",
+        help="Input file is in TSV format. If not supplied will try to infer from file extension.",
+        show_default=False,
     ),
     collapse_file_url: Optional[str] = typer.Option(
         None,
@@ -145,15 +154,26 @@ def main(
     """
     version = get_version()
     print(f"\n[bold green]pango-collapse {version}[bold green]\n", file=sys.stderr)
-    import pandas as pd
 
     collapsor = Collapsor(alias_file=alias_file)
 
-    sep = "\t" if input.suffix == ".tsv" else ","
+    if tsv:
+        sep = "\t"
+    else:
+        sep = "\t" if input.name.endswith(".tsv") else ","
 
-    df = pd.read_csv(input, low_memory=False, sep=sep)
-    
+    try:
+        if input.name == "<stdin>":
+            df = pd.read_csv(input, low_memory=False, sep=sep)
+        else:
+            df = pd.read_csv(input, low_memory=False, sep=sep)
+    except pd.errors.ParserError:
+        print(f"[red]Could not parse input file using '{sep}' delimiter. Please check the file format and delimiter.[red]", file=sys.stderr)
+        raise typer.Exit(code=1)
+
     if lineage_column not in df.columns:
+        if input.name == "<stdin>":
+            input = "input file"
         print(f"[red]Could not find lineage column '{lineage_column}' in {input}[red]. Use --lineage to specify the pango lineage column name.", file=sys.stderr)
         raise typer.Exit(code=1)
     
