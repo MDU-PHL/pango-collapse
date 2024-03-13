@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: wytamma/pango-collapse:${{ env.VER }}
+          tags: wytamma/pango-collapse:${{ env.VER }},wytamma/pango-collapse:latest
           build-args: VER=${{ env.VER }}
           platforms: linux/amd64,linux/arm64
     
