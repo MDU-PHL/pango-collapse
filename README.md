@@ -10,10 +10,16 @@ CLI to collapse Pango lineages up to user defined parent lineages for reporting.
 
 ## Install 
 
-Install from pypi with pip.
+Install from PYPI with pip.
 
 ```bash
 pip install pango-collapse
+```
+
+Pull from Docker Hub.
+
+```bash
+docker pull wytamma/pango-collapse
 ```
 
 ## Usage
