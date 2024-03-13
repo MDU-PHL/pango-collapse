@@ -11,15 +11,13 @@ app = typer.Typer()
 
 
 def get_version():
-    import pkg_resources
-
-    return pkg_resources.get_distribution("pango-collapse").version
-
+    import importlib.metadata
+    return importlib.metadata.version("pango-collapse")
 
 def version_callback(value: bool):
     if value:
         version = get_version()
-        print(f"pango-collapse {version}", file=sys.stderr)
+        print(f"pango-collapse {version}")
         raise typer.Exit()
 
 
@@ -117,7 +115,7 @@ def main(
     df = pd.read_csv(input, low_memory=False, sep=sep)
     
     if lineage_column not in df.columns:
-        print(f"[red]Could not find lineage column: {lineage_column}[red]", file=sys.stderr)
+        print(f"[red]Could not find lineage column '{lineage_column}' in {input}[red]. Use --lineage to specify the pango lineage column name.", file=sys.stderr)
         raise typer.Exit(code=1)
     
     if not collapse_file.startswith("http") and not Path(collapse_file).exists():
