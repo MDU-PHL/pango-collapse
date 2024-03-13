@@ -29,11 +29,13 @@ $ cat input.csv
 | 2      | BA.4.6   |
 | 3      | BE.1     |
 
-`pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the user defined collapse file the original compressed lineage will be returned. The highest level you can collapse up to is either `A` or `B` by adding A and B to the collapse file. 
+`pango-collapse` will collapse lineages up to the first user defined parent lineage (specified in a text file with `--collapse-file`). If the sample lineage has no parent lineage in the user defined collapse file the original compressed lineage will be returned. 
+
+The highest level you can collapse up to is either `A` or `B`. Additionally, there is a special `Recombinant` lineage which can be used to collapse all recombinant lineages up to a single `Recombinant` group.
 
 By default (i.e. if no collapse file is specified) `pango-collapse` uses the collapse file found [here](https://github.com/MDU-PHL/pango-collapse/blob/main/pango_collapse/collapse.txt). This file is dependant on the version of `pango-collapse`, use `--latest` to load the latest version of the collapse file from github at run time. 
 
-Here is a example collapse file (collapse.txt) that will be used to collapse sublineages of `BA.5` and `BQ.1` up to these parent lineages.
+Here is a simple example collapse file (collapse.txt) that will be used to collapse sublineages of `BA.5` and `BQ.1` up to these parent lineages.
 
 ```bash
 $ cat collapse.txt
@@ -46,6 +48,12 @@ BQ.1
 
 ```bash
 $ pango-collapse input.csv --collapse-file collapse.txt -o output.csv 
+```
+
+Alternatively you can use the `--parent` (`-p`) flag to specify the parent lineages to collapse up to. 
+
+```bash
+$ pango-collapse input.csv -p BA.5 -p BQ.1 -o output.csv 
 ```
 
 ```
@@ -161,8 +169,11 @@ df.Lineage_family.value_counts().plot(kind='bar')
 │                                        lineages (one per line) to collapse up   │
 │                                        to. Defaults to collapse file shipped    │
 │                                        with this version of pango-collapse.     │
-│                                        [default:                                │
-│                                        /Users/wwirth/Library/CloudStorage/OneD… │
+│    --parent              -p      TEXT  Parental lineage to collapse up to. Can  │
+│                                        be used multiple times to collapse to    │
+│                                        multiple lineages. If --collapse-file    │
+│                                        is supplied parents will be appended to  |
+|                                        the file.                                │
 │    --lineage-column      -l      TEXT  Column to extract from input file for    │
 │                                        lineage.                                 │
 │                                        [default: Lineage]                       │

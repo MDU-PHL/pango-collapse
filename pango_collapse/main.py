@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 from urllib.error import URLError
 import typer
 import sys
@@ -38,10 +38,18 @@ def main(
         show_default=False,
     ),
     collapse_file: Optional[str] = typer.Option(
-        f"{Path(__file__).parent.resolve()}/collapse.txt",
+        None,
         "-c",
         "--collapse-file",
-        help="Path or URL to collapse file with lineages (one per line) to collapse up to. Defaults to collapse file shipped with this version of pango-collapse.",
+        help="Path or URL to collapse file with parental lineages (one per line) to collapse up to. Defaults to collapse file shipped with this version of pango-collapse.",
+        show_default=False,
+    ),
+    parents: Optional[List[str]] = typer.Option(
+        None,
+        "-p",
+        "--parent",
+        help="Parental lineage to collapse up to. Can be used multiple times to collapse to multiple lineages. If --collapse-file is supplied parents will be appended to the file.",
+        show_default=False,
     ),
     lineage_column: Optional[str] = typer.Option(
         "Lineage",
@@ -118,6 +126,11 @@ def main(
         print(f"[red]Could not find lineage column '{lineage_column}' in {input}[red]. Use --lineage to specify the pango lineage column name.", file=sys.stderr)
         raise typer.Exit(code=1)
     
+    collapse_file_supplied = True
+    if collapse_file is None :
+        collapse_file_supplied = False
+        collapse_file = str(Path(__file__).parent.resolve() / "collapse.txt")
+
     if not collapse_file.startswith("http") and not Path(collapse_file).exists():
         print(f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr)
         raise typer.Exit(code=1)
@@ -146,6 +159,12 @@ def main(
         collapse_file = Path(collapse_file)
         potential_parents = load_potential_parents_from_file(collapse_file=collapse_file)
     
+    if parents and collapse_file_supplied:
+        potential_parents += parents
+        potential_parents = list(dict.fromkeys(potential_parents))  # remove duplicates
+    elif parents and not collapse_file_supplied:
+        potential_parents = parents
+
     print("[yellow]Collapsing up to the following lineages:[yellow]", file=sys.stderr)
     print(" -", "\n - ".join(potential_parents), file=sys.stderr)
     
