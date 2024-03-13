@@ -35,4 +35,5 @@ jobs:
           push: true
           tags: wytamma/pango-collapse:${{ env.VER }}
           build-args: VER=${{ env.VER }}
+          platforms: linux/amd64,linux/arm64
     
