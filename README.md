@@ -2,6 +2,7 @@
 
 [![](https://img.shields.io/pypi/v/pango-collapse.svg)](https://pypi.org/project/pango-collapse/)
 [![tests](https://github.com/MDU-PHL/pango-collapse/actions/workflows/tests.yaml/badge.svg)](https://github.com/MDU-PHL/pango-collapse/actions/workflows/tests.yaml)
+[![write-the - docs](https://badgen.net/badge/write-the/docs/blue?icon=https://raw.githubusercontent.com/Wytamma/write-the/master/images/write-the-icon.svg)](https://write-the.wytamma.com/)
 [![DOI](https://zenodo.org/badge/532809949.svg)](https://zenodo.org/doi/10.5281/zenodo.10347041)
 
 CLI to collapse Pango lineages up to user defined parent lineages for reporting.
