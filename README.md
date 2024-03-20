@@ -88,7 +88,7 @@ The delimiter (`:`) separates each alias level in the full lineage. You can dete
 Expanded lineages can be converted to full lineages by removing the delimiters and sub-lineage letters. Compressed lineages can be obtained by taking the final component of the expanded lineage.
 
 ```bash
-$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Za-z]+//g' 
+$ echo "B.1.1.529:BA.5.3.1:BE.1" | sed -E 's/:[A-Z]+//g' 
 B.1.1.529.5.3.1.1  # full lineage
 $ echo "B.1.1.529:BA.5.3.1:BE.1" | awk -F: '{print $NF}'
 BE.1  # compressed lineage
