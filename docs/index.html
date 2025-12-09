@@ -10,20 +10,15 @@
     <script src="js/error_handler.js"></script>
 
     <!-- Load required PyScript packages -->
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-    <script defer src="https://pyscript.net/alpha/pyscript.js"onerror=scriptLoadFailure('pyscr ipt.js')></script>
-
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.11.2/core.css">
+    <script type="module" src="https://pyscript.net/releases/2025.11.2/core.js"></script>
+    
     <link rel="stylesheet" href="css/table.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
 
     <!-- Load required Python packages -->
-    <py-env>
-    - pango-collapse
-    - paths:
-      - error_handler.py
-      - jhanley_html.py
-    </py-env>
+    <script type="py" src="./app.py" config="./pyscript.json"></script> 
   </head>
 
   <body>
@@ -59,7 +54,6 @@
         </li>
       </ul>
     </div>
-    <py-script src="app.py"></py-script>
   </body>
   <script type="text/javascript">
     // Quick and simple export target #table_id into a csv

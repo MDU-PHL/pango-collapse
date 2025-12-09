@@ -1,15 +1,18 @@
 try:
 	from error_handler import errorHandler
-	import asyncio
-	from pyodide import create_proxy
+	from pyodide.ffi import create_proxy
 	from jhanley_html import HTML
 	from js import document, download_table_as_csv
 	import csv
-	from pango_collapse import Collapsor
-	from pango_collapse.utils import load_potential_parents_from_file
 	from pyodide.http import open_url
 except Exception as e:
 	errorHandler(e)
+
+async def install_pango_collapse():
+	import micropip
+	# Install pango-collapse - numpy and pandas are already provided by PyScript config
+	await micropip.install(["pango-collapse"], keep_going=True, deps=False)
+
 
 def build_table(data, headers):
 	table_data = []
@@ -29,6 +32,9 @@ def copy_file_to_local(url):
 		file.writelines(open_url((url)).readlines())
 
 def collapse(data, lineage_col, collapse_col, expanded_col='Lineage_expanded'):
+	from pango_collapse import Collapsor
+	from pango_collapse.utils import load_potential_parents_from_file
+
 	copy_file_to_local('https://raw.githubusercontent.com/cov-lineages/pango-designation/master/pango_designation/alias_key.json')
 	collapsor = Collapsor(alias_file="alias_key.json")
 	collapse_file_url = document.getElementById("collapse_file").value
@@ -71,6 +77,7 @@ async def process_file(event):
 	e.style.display ='none'
 
 async def main():
+	await install_pango_collapse()
 	# Create a Python proxy for the callback function
 	# process_file() is your function to process events from FileReader
 	file_event = create_proxy(process_file)

@@ -1,5 +1,5 @@
 from js import console, document, window
-from pyodide import create_proxy
+from pyodide.ffi import create_proxy
 
 class HTML:
 	def init():
