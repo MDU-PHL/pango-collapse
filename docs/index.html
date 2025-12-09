@@ -6,22 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Load error_handler.js script before other scripts -->
-    <script src="js/error_handler.js"></script>
+  <!-- PyScript runtime (version as requested) -->
+  <link rel="stylesheet"
+        href="https://pyscript.net/releases/2025.11.1/core.css" />
+  <script type="module"
+          src="https://pyscript.net/releases/2025.11.1/core.js"></script>
+  
+  <link rel="stylesheet" href="css/table.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
+  
+</head>
 
-    <!-- Load required PyScript packages -->
-    <link rel="stylesheet" href="https://pyscript.net/releases/2025.11.2/core.css">
-    <script type="module" src="https://pyscript.net/releases/2025.11.2/core.js"></script>
-    
-    <link rel="stylesheet" href="css/table.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
-
-    <!-- Load required Python packages -->
-    <script type="py" src="./app.py" config="./pyscript.json"></script> 
-  </head>
-
-  <body>
+<body>
     <!-- Load the Python main application file -->
     <div class="max-w-md mx-auto">
       <div class="space-y-4">
@@ -41,50 +38,20 @@
             <label for="collapse_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Collapse File</label>
             <input id="collapse_file" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt" required>
         </div>
-          <input class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  id="myfile" name="myfile" type="file">
+          <input style="display: none;" class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  id="myfile" name="myfile" type="file">
         </div>
       </div>
-      <ul id="loading" name="loading" style="display:none" class="max-w-md space-y-2 text-gray-500 list-inside dark:text-gray-400">
+      <ul id="loading" name="loading" style="display:block" class="max-w-md space-y-2 text-gray-500 list-inside dark:text-gray-400">
         <li class="flex items-center">
           <div role="status">
               <svg aria-hidden="true" class="w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
               <span class="sr-only">Loading...</span>
           </div>
-          Collapsing your file...
+          Loading...
         </li>
       </ul>
     </div>
+     <!-- Load required Python packages -->
+    <script type="py" src="./main.py" config="./pyscript.json"></script> 
   </body>
-  <script type="text/javascript">
-    // Quick and simple export target #table_id into a csv
-    function download_table_as_csv(table_id, separator = ',') {
-        // Select rows from table_id
-        var rows = document.querySelectorAll('table#' + table_id + ' tr');
-        // Construct csv
-        var csv = [];
-        for (var i = 0; i < rows.length; i++) {
-            var row = [], cols = rows[i].querySelectorAll('td, th');
-            for (var j = 0; j < cols.length; j++) {
-                // Clean innertext to remove multiple spaces and jumpline (break csv)
-                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
-                // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
-                data = data.replace(/"/g, '""');
-                // Push escaped string
-                row.push('"' + data + '"');
-            }
-            csv.push(row.join(separator));
-        }
-        var csv_string = csv.join('\n');
-        // Download it
-        var filename = 'pango-collapse' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
-        var link = document.createElement('a');
-        link.style.display = 'none';
-        link.setAttribute('target', '_blank');
-        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-  </script>
 </html>

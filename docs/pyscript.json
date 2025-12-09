@@ -2,11 +2,7 @@
     "packages": [
         "numpy",
         "pandas",
-        "micropip"
-    ],
-    "files": {
-        "./error_handler.py": "./error_handler.py",
-        "./jhanley_html.py": "./jhanley_html.py"
-    },
-    "experimental_create_proxy": "auto"
+        "micropip",
+        "pango_aliasor"
+    ]
 }
