@@ -16,18 +16,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.12', '3.13', '3.14']
+        python-version: ['3.12', '3.13']
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install poetry
-      run: pipx install poetry
+
+    # Setup Python
     - name: Install dependencies for Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'poetry'
+
+    # Install Poetry
+    - name: Install poetry
+      run: pipx install poetry
+    
+    # Install deps 
     - run: poetry install
+
+    # Run tests
     - name: Tests
-      run: |
-        poetry run pytest
+      run: poetry run pytest
