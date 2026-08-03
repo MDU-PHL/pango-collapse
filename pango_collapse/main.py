@@ -61,7 +61,7 @@ def version_callback(value: bool):
 def main(
     ctx: typer.Context,
     input: Optional[typer.FileText] = typer.Argument(
-        None,
+        ... if sys.stdin.isatty() else sys.stdin,
         help="Path to input CSV/TSV with Lineage column.",
         dir_okay=False,
         exists=True,
