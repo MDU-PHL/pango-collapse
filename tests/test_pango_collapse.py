@@ -1,3 +1,5 @@
+import subprocess
+
 from typer.testing import CliRunner
 
 from pango_collapse.main import app
@@ -32,6 +34,25 @@ def test_cli():
     assert expected.Lineage_full.equals(output.Lineage_full)
     assert expected.Lineage_family.equals(output.Lineage_family)
     assert expected.Lineage_expanded.equals(output.Lineage_expanded)
+
+
+def test_pango_collapse_with_file():
+    input_file_path = "tests/data/input.csv"
+
+    with open(input_file_path, "r") as f:
+        result = subprocess.run(
+            ["pango-collapse", "-p", "BA.5"],
+            stdin=f,  # Pass the file handle directly as stdin
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+    assert (
+        result.stdout.splitlines()[0]
+        == "Lineage,Lineage_full,Lineage_expanded,Lineage_family"
+    )
+    assert ":BA.5" in result.stdout
 
 
 def test_nextclade():
