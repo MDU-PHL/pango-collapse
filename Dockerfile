@@ -1,5 +1,7 @@
 # Use an official Python runtime as a parent image with a specific version for consistency
-FROM python:3.10.5-slim
+FROM python:3.13.16-slim-bookworm
+
+ARG VER
 
 LABEL software="pango-collapse"
 LABEL software.version="${VER}"
