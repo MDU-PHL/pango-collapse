@@ -1,14 +1,16 @@
+import sys
 from pathlib import Path
 from typing import List, Optional
 from urllib.error import URLError
-import typer
-import sys
-from .utils import load_potential_parents_from_file, load_potential_parents_from_url
-from .collapsor import Collapsor
-from rich import print
-import pandas as pd
 
-app = typer.Typer()
+import pandas as pd
+import typer
+from rich import print
+
+from .collapsor import Collapsor
+from .utils import load_potential_parents_from_file, load_potential_parents_from_url
+
+app = typer.Typer(no_args_is_help=True)
 
 
 def get_version():
@@ -26,7 +28,9 @@ def get_version():
       '1.0.0'
     """
     import importlib.metadata
+
     return importlib.metadata.version("pango-collapse")
+
 
 def version_callback(value: bool):
     """
@@ -55,7 +59,8 @@ def version_callback(value: bool):
 
 @app.command(context_settings={"help_option_names": ["-h", "--help"]})
 def main(
-    input: typer.FileText = typer.Argument(
+    ctx: typer.Context,
+    input: Optional[typer.FileText] = typer.Argument(
         ... if sys.stdin.isatty() else sys.stdin,
         help="Path to input CSV/TSV with Lineage column.",
         dir_okay=False,
@@ -155,6 +160,15 @@ def main(
     version = get_version()
     print(f"\n[bold green]pango-collapse {version}[bold green]\n", file=sys.stderr)
 
+    if input is None:
+        ctx.get_help()
+
+        print(
+            "[red]Error: No input provided. Please provide a file or pipe data to stdin.[red]",
+            file=sys.stderr,
+        )
+        raise typer.Exit(code=1)
+
     collapsor = Collapsor(alias_file=alias_file)
 
     if tsv:
@@ -163,29 +177,36 @@ def main(
         sep = "\t" if input.name.endswith(".tsv") else ","
 
     try:
-        if input.name == "<stdin>":
-            df = pd.read_csv(input, low_memory=False, sep=sep)
-        else:
-            df = pd.read_csv(input, low_memory=False, sep=sep)
+        # 2. Simplified: Read CSV regardless of whether it is stdin or a file
+        df = pd.read_csv(input, low_memory=False, sep=sep)
+
     except pd.errors.ParserError:
-        print(f"[red]Could not parse input file using '{sep}' delimiter. Please check the file format and delimiter.[red]", file=sys.stderr)
+        print(
+            f"[red]Could not parse input file using '{sep}' delimiter. Please check the file format and delimiter.[red]",
+            file=sys.stderr,
+        )
         raise typer.Exit(code=1)
 
     if lineage_column not in df.columns:
         if input.name == "<stdin>":
             input = "input file"
-        print(f"[red]Could not find lineage column '{lineage_column}' in {input}[red]. Use --lineage to specify the pango lineage column name.", file=sys.stderr)
+        print(
+            f"[red]Could not find lineage column '{lineage_column}' in {input}[red]. Use --lineage to specify the pango lineage column name.",
+            file=sys.stderr,
+        )
         raise typer.Exit(code=1)
-    
+
     collapse_file_supplied = True
-    if collapse_file is None :
+    if collapse_file is None:
         collapse_file_supplied = False
         collapse_file = str(Path(__file__).parent.resolve() / "collapse.txt")
 
     if not collapse_file.startswith("http") and not Path(collapse_file).exists():
-        print(f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr)
+        print(
+            f"[red]Could not find collapse file: {collapse_file}[red]", file=sys.stderr
+        )
         raise typer.Exit(code=1)
-    
+
     if collapse_file_url:
         # deprecated
         print(
@@ -193,23 +214,28 @@ def main(
             file=sys.stderr,
         )
         collapse_file = collapse_file_url
-    
+
     if latest:
         if collapse_file_url is None:
             collapse_file_url = "https://raw.githubusercontent.com/MDU-PHL/pango-collapse/main/pango_collapse/collapse.txt"
         collapse_file = collapse_file_url
-    
+
     if collapse_file.startswith("http"):
         print(f"Loading collapse file from {collapse_file}\n", file=sys.stderr)
         try:
             potential_parents = load_potential_parents_from_url(url=collapse_file)
         except URLError:
-            print(f"[red]Could not download collapse file from {collapse_file}[red]", file=sys.stderr)
+            print(
+                f"[red]Could not download collapse file from {collapse_file}[red]",
+                file=sys.stderr,
+            )
             raise typer.Exit(code=1)
     else:
         collapse_file = Path(collapse_file)
-        potential_parents = load_potential_parents_from_file(collapse_file=collapse_file)
-    
+        potential_parents = load_potential_parents_from_file(
+            collapse_file=collapse_file
+        )
+
     if parents and collapse_file_supplied:
         potential_parents += parents
         potential_parents = list(dict.fromkeys(potential_parents))  # remove duplicates
@@ -218,14 +244,15 @@ def main(
 
     print("[yellow]Collapsing up to the following lineages:[yellow]", file=sys.stderr)
     print(" -", "\n - ".join(potential_parents), file=sys.stderr)
-    
+
     df[full_column] = collapsor.uncompress_column(df[lineage_column])
     df[expand_column] = collapsor.expand_column(df[full_column])
-    df[collapse_column] = collapsor.collapse_column(df[lineage_column], potential_parents=potential_parents, strict=strict)
-    
+    df[collapse_column] = collapsor.collapse_column(
+        df[lineage_column], potential_parents=potential_parents, strict=strict
+    )
+
     if output:
         sep = "\t" if output.suffix == ".tsv" else ","
         df.to_csv(output, index=False, sep=sep)
     else:
         df.to_csv(sys.stdout, index=False, sep=sep)
-

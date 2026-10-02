@@ -75,6 +75,12 @@ $ cat output.csv
 
 Here we can see that samples 1 and 3 were collapsed to `BA.5`. Sample 1 (`BA.5.2.1`) and 3 (`BE.1`) are both sublineages of `BA.5` and `BA.5` is returned in the `Lineage_family` column. None of the parents of `BA.4.6` (sample 2) are in the collapse file and so the orginal lineage is returned. None of the samples match `BQ.1` (the other lineage in the collapse file) and so it is ignored.
 
+As of v0.8.1 `pango-collapse` now includes support for unix pipes:
+
+```bash
+cat tests/data/input.csv | pango-collapse -p BA.5 | grep ":BA.5"
+```
+
 ## Expanded lineage format
 
 The `Lineage_expanded` column contains the lineage in expanded format which provides complete lineage information and searchability. 
