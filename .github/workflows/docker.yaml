@@ -1,6 +1,10 @@
 name: docker
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, e.g. 1.2.3"
+        required: true
   push:
     tags:
       - 'v*.*.*'
