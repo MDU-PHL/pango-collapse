@@ -33,7 +33,7 @@ USER app_user
 COPY . .
 
 # Install project dependencies
-RUN poetry install --no-interaction --no-ansi --no-dev
+RUN poetry install --no-interaction --no-ansi --without dev
 
 # Run the application
 ENTRYPOINT ["poetry", "run"]
